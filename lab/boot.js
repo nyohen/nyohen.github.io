@@ -3,7 +3,7 @@
 //   - an ear twitches, the eyes blink; the name decodes letter by letter under it; a dotted progress bar fills;
 //   - corners: "NYG // portfolio" + live Toronto time on top, a typed boot log (real facts from content.js) and Skip below;
 //   - exit: the cat's dots burst outward, then a box opens from the centre and grows past the edges, softly revealing the site.
-// Any key, click, tap, wheel or Skip ends it at once. Skipped for reduced motion and with no JS (the inline script in <head>
+// Only the Skip button ends it early (Noel: scrolling or clicking shouldn't); the page behind is inert, so Tab goes to Skip. Skipped for reduced motion and with no JS (the inline script in <head>
 // adds html.boot; ?boot=0 skips it for testing). position: fixed, so nothing on the page moves. CSS hides it at 4 s if this fails.
 (() => {
   const root = document.documentElement, el = document.querySelector('.boot-screen');
@@ -61,10 +61,13 @@
   };
   raf = requestAnimationFrame(tick);
   const end = () => { if (done) return; done = true; cancelAnimationFrame(raf); el.classList.add('out');
-    ['keydown', 'pointerdown', 'wheel', 'touchstart'].forEach((t) => removeEventListener(t, end, true));
+    behind.forEach((e) => (e.inert = false));
     setTimeout(() => el.classList.add('lift'), 340);   // the box opens (1.25 s, CSS)
     setTimeout(() => root.classList.remove('boot'), 860);   // page scrolls again and the hero cascades in while the box grows
     setTimeout(() => { const had = el.contains(document.activeElement); el.remove(); if (had) { const s = document.querySelector('.skip'); s && s.focus(); } }, 1640); };   // keyboard focus lands on 'Skip to content', not <body>
   setTimeout(end, LEN + 150);
-  ['keydown', 'pointerdown', 'wheel', 'touchstart'].forEach((t) => addEventListener(t, end, { capture: true, passive: true }));
+  const behind = [...document.body.children].filter((e) => e !== el && !e.inert && e.tagName !== 'SCRIPT'); behind.forEach((e) => (e.inert = true));   // the page can't be clicked or tabbed to
+  el.querySelector('.boot-skip').addEventListener('click', end);
+  addEventListener('wheel', (e) => { if (!done) e.preventDefault(); }, { passive: false });   // no scrolling under it (Lenis listens to the wheel)
+  addEventListener('touchmove', (e) => { if (!done) e.preventDefault(); }, { passive: false });
 })();

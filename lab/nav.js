@@ -30,7 +30,9 @@
   });
 
   // --- panel open: page behind stops; closed: resumes ---
-  if (lenis) new MutationObserver(() => (root.classList.contains('cpanel-open') ? lenis.stop() : lenis.start())).observe(root, { attributes: true, attributeFilter: ['class'] });
+  // (also stopped while the boot screen is up, so a wheel or swipe can't scroll the page under it)
+  const held = () => root.classList.contains('cpanel-open') || root.classList.contains('boot');
+  if (lenis) { if (held()) lenis.stop(); new MutationObserver(() => (held() ? lenis.stop() : lenis.start())).observe(root, { attributes: true, attributeFilter: ['class'] }); }
 
   // --- page transition: only when going to the Blog (the CSS @view-transition would otherwise animate every same-site link) ---
   addEventListener('pageswap', (e) => { try { if (e.viewTransition && !/^\/blog\//.test(new URL(e.activation.entry.url).pathname)) e.viewTransition.skipTransition(); } catch (x) {} });
