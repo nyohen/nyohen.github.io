@@ -84,7 +84,7 @@ window.PORTFOLIO.cases = [
     result: 'Shipped production changes under change management, with SLA-bound case fixes.',
     stack: ['React', 'AWS Redshift', 'QuickSight', 'Amplify', 'Cognito', 'Lambda', 'ArcGIS Online', 'Esri REST API', 'Flowable', 'Jira'],
     limits: 'Internal work: no screenshots, internal names or volumes are shown.' },
-  { id: 'coop', kind: 'work', weight: 2, title: 'MPAC co-op', sub: 'Co-op Developer · Jan – Sep 2023', scene: 'bars',
+  { id: 'coop', kind: 'work', weight: 2, title: 'Co-Op', sub: 'MPAC · Co-op Developer · Jan – Sep 2023', scene: 'bars',
     outcome: 'My first co-op: automation and UI work on the employee onboarding and offboarding system.',
     stats: [['9', 'months'], ['Company-wide', 'offboarding automated']],
     did: ['Automated the company-wide offboarding workflow with Python AWS Lambda functions: notices to Facilities and Communications, auto-created Jira Service Desk tickets.',

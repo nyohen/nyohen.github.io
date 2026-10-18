@@ -70,3 +70,17 @@ html.cpanel-open { overflow: hidden; }
 .cbar.inline button[aria-current='true'] { background: var(--ink, #393837); color: var(--paper, #efe8dc); }
 .cbar.inline { --ring: var(--ink, #393837); }
 .cbar.inline button i { box-shadow: 0 0 0 1px rgba(57,56,55,.4); }   /* pale dots (school, contact) stay visible on cream */
+
+/* MPAC group: one button that slides open to the right to show Co-op and Contract */
+.cbar li.grp { display: inline-flex; align-items: center; }
+.cbar .grp-btn .chev { display: inline-block; margin-left: .1rem; transition: transform 220ms; }
+.cbar li.grp.open .grp-btn .chev { transform: rotate(180deg); }
+.cbar .grp-sub { display: inline-flex; gap: .25rem; max-width: 0; overflow: hidden; opacity: 0; visibility: hidden;
+  transition: max-width 280ms cubic-bezier(.2,.8,.2,1), opacity 200ms, visibility 0s 280ms; }
+.cbar li.grp.open .grp-sub { max-width: 16rem; opacity: 1; visibility: visible; transition: max-width 280ms cubic-bezier(.2,.8,.2,1), opacity 200ms; }
+.cbar .grp-sub button { padding: 0 .8rem; }
+.cbar .grp-btn.has-current { box-shadow: inset 0 0 0 1.5px currentColor; }
+@media (prefers-reduced-motion: reduce) { .cbar .grp-sub, .cbar .grp-btn .chev { transition: none; } }
+.cbar li.grp { border-radius: 999px; transition: background-color 200ms; }
+.cbar li.grp.open { background: rgba(255,75,31,.10); }
+.cbar .grp-sub button::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--k-work); margin-right: .4rem; flex: none; }

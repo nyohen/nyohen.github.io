@@ -15,7 +15,20 @@ window.CaseUI = (() => {
   const bar = document.createElement('nav'), panel = document.createElement('aside'), scrim = document.createElement('div');
   scrim.className = 'cscrim'; scrim.setAttribute('aria-hidden', 'true');
   bar.className = 'cbar'; bar.setAttribute('aria-label', 'Case studies');
-  bar.innerHTML = `<ul>${CASES.map((c) => `<li><button type="button" data-id="${c.id}" style="--k:${KCOL[c.kind]}"><i aria-hidden="true"></i>${esc(c.title)}</button></li>`).join('')}</ul>`;
+  // The two MPAC roles share one "MPAC" button that slides open to "Co-op" and "Contract" (hover, keyboard focus, or tap).
+  const GROUP = { label: 'MPAC', items: [['coop', 'Co-op'], ['mpac', 'Contract']] };
+  const one = (c) => `<li><button type="button" data-id="${c.id}" style="--k:${KCOL[c.kind]}"><i aria-hidden="true"></i>${esc(c.title)}</button></li>`;
+  const grp = () => `<li class="grp" style="--k:${KCOL.work}"><button type="button" class="grp-btn" aria-expanded="false" aria-controls="cbar-mpac"><i aria-hidden="true"></i>${GROUP.label}<span class="chev" aria-hidden="true">›</span></button>
+      <span class="grp-sub" id="cbar-mpac">${GROUP.items.map(([id, t]) => `<button type="button" data-id="${id}" aria-label="MPAC ${t}">${t}</button>`).join('')}</span></li>`;
+  const inGroup = new Set(GROUP.items.map(([id]) => id));
+  bar.innerHTML = `<ul>${CASES.map((c) => (c.id === GROUP.items[0][0] ? grp() : inGroup.has(c.id) ? '' : one(c))).join('')}</ul>`;
+  const grpLi = bar.querySelector('.grp'), grpBtn = bar.querySelector('.grp-btn');
+  const setOpen = (v) => { grpLi.classList.toggle('open', v); grpBtn.setAttribute('aria-expanded', String(v)); };
+  grpBtn.addEventListener('click', () => setOpen(!grpLi.classList.contains('open')));   // tap / Enter toggles; hover opens via CSS
+  grpLi.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') setOpen(true); });
+  grpLi.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse' && !grpLi.contains(document.activeElement)) setOpen(false); });
+  grpLi.addEventListener('focusout', () => setTimeout(() => { if (!grpLi.contains(document.activeElement)) setOpen(false); }, 0));
+  grpLi.addEventListener('keydown', (e) => { if (e.key === 'Escape' && grpLi.classList.contains('open')) { e.stopPropagation(); setOpen(false); grpBtn.focus(); } });
   panel.className = 'cpanel'; panel.setAttribute('role', 'dialog'); panel.setAttribute('aria-modal', 'true'); panel.setAttribute('aria-labelledby', 'cp-title');
   // closed: panel not tabbable. open: everything else on the page is inert (focus stays in the panel), page behind is dimmed
   const shut = (v) => { panel.inert = v; v ? panel.setAttribute('aria-hidden', 'true') : panel.removeAttribute('aria-hidden');
@@ -68,13 +81,14 @@ window.CaseUI = (() => {
         history.replaceState(history.state, '', base); history.pushState({ cpanel: true }, '', base); pushed = true; } }
     panel.classList.add('on');
     requestAnimationFrame(() => panel.querySelector('#cp-title').focus({ preventScroll: true })); };
-  const mark = () => bar.querySelectorAll('button').forEach((b) => b.setAttribute('aria-current', String(CASES[cur] && b.dataset.id === CASES[cur].id)));
+  const mark = () => { bar.querySelectorAll('button[data-id]').forEach((b) => b.setAttribute('aria-current', String(!!CASES[cur] && b.dataset.id === CASES[cur].id)));
+    grpBtn.classList.toggle('has-current', !!CASES[cur] && inGroup.has(CASES[cur].id)); };
   const api = {
     cases: CASES,
     mount(h = {}) {
       hooks = h; if (h.barInto) { bar.classList.add('inline'); h.barInto.appendChild(bar); document.body.append(scrim, panel); } else document.body.append(bar, scrim, panel);   // barInto: put the bar inside a page section
       scrim.addEventListener('click', () => api.close());
-      bar.querySelectorAll('button').forEach((b) => b.addEventListener('click', () => api.open(b.dataset.id, b)));
+      bar.querySelectorAll('button[data-id]').forEach((b) => b.addEventListener('click', () => api.open(b.dataset.id, b)));
       addEventListener('keydown', (e) => { if (e.key === 'Escape' && isOpen) api.close(); });
       addEventListener('popstate', () => { if (scrollAfterPop) { const t = scrollAfterPop; scrollAfterPop = null; requestAnimationFrame(() => t.scrollIntoView({ block: 'center' })); }
         if (pushed) { pushed = false; if (isOpen) api.close(true); } });
