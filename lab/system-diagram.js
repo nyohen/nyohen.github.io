@@ -21,7 +21,7 @@ window.mountSystem = (box) => {
       ev: [['Casefile', 'Read-only, parameterized SQL tools over the ledger.', 'casefile'], ['RootCause', 'Parsers for Prometheus, Jaeger and JSON-lines log exports.', 'rootcause'],
            ['MPAC', 'Dashboards over AWS Redshift data; data-drift validation across 12 business domains, checked daily.', 'mpac']] },
     { id: 'verifier', x: 758, y: 150, name: 'Verifier', role: 'Plain code checks every claim', what: 'Nothing the AI says is trusted until code proves it. Failures go back, at most 3 times, then to a person.',
-      ev: [['Casefile', 'Flagged all 417 deliberately corrupted claims, with 0 of 994 clean claims falsely flagged. An earlier version missed about 5%: the date check accepted any real date. Fixed with a new rule and a test.', 'casefile'],
+      ev: [['Casefile', 'Flagged all 417 deliberately corrupted claims, with 0 of 994 clean claims falsely flagged. An earlier version missed about 5%: a wrong end date in a \"between\" range could still match one cited transfer. Fixed with an exact-span rule and a test.', 'casefile'],
            ['RootCause', 'Re-queries the telemetry in a fresh time window with stricter thresholds before it reports; max 3 loops, then "inconclusive".', 'rootcause']] },
     { id: 'ci', x: 927, y: 150, name: 'Tests & CI', role: 'Gates that stop regressions', what: 'Every change has to pass the same checks again.',
       ev: [['RootCause', '52 automated tests, and a CI gate that fails the build if diagnosis accuracy drops more than 5 points.', 'rootcause'],

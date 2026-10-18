@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Page not found — Noel Yohannes Ghebremeskel</title>
+<meta name="robots" content="noindex">
+<meta name="color-scheme" content="dark light">
+<script>try{if(localStorage.getItem('nyg-theme2')==='light')delete document.documentElement.dataset.theme}catch(e){}</script>
+<meta name="darkreader-lock">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;900&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* 404 (GitHub Pages serves this for any unknown path). Same palette and type as the home page; a small dot cat looking lost. */
+  :root { --paper: #efe8dc; --ink: #393837; --muted: #4a463f; --hot: #ff4b1f; --hot-text: #9e2b07; --rule: rgba(57,56,55,.18); color-scheme: light; }
+  html[data-theme='dark'] { --paper: #16151a; --ink: #ece6da; --muted: #bdb6aa; --hot-text: #ff8a63; --rule: rgba(236,230,218,.16); color-scheme: dark; }   /* dark is the default, like the home page */
+  html, body { margin: 0; background: var(--paper); color: var(--ink); font-family: Archivo, system-ui, sans-serif; font-weight: 500; -webkit-font-smoothing: antialiased; }
+  main { min-height: 100vh; box-sizing: border-box; display: grid; place-content: center; justify-items: start; gap: 1.2rem; padding: 2rem 1rem; max-width: 40rem; margin: 0 auto; }
+  .mono { font-family: 'Geist Mono', ui-monospace, monospace; font-size: .75rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 0; }
+  h1 { font: 900 clamp(2.4rem, 8vw, 4.4rem)/.95 Archivo, sans-serif; letter-spacing: -.03em; margin: 0; }
+  p { margin: 0; line-height: 1.5; max-width: 32rem; }
+  svg { width: 120px; height: auto; }
+  svg circle { fill: var(--ink); } svg .o { fill: var(--hot); }
+  .acts { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: .4rem; }
+  a.btn { display: inline-flex; align-items: center; min-height: 44px; padding: 0 1.1rem; border: 1.5px solid var(--ink); color: var(--ink); text-decoration: none; font-weight: 700; }
+  a.btn.hot { background: var(--hot); border-color: var(--hot); color: #131217; }
+  a.btn:hover { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+  a:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+</style>
+</head>
+<body>
+<main>
+  <svg viewBox="0 0 210 120" aria-hidden="true">
+    <!-- the boot-screen cat, eyes looking sideways -->
+    <g id="c"></g>
+  </svg>
+  <p class="mono">[ 404 · page not found ]</p>
+  <h1>This page wandered off.</h1>
+  <p>The link may be old or mistyped. Everything is on the home page: projects, experience, résumé and contact.</p>
+  <div class="acts"><a class="btn hot" href="/">Go to the home page</a><a class="btn" href="/blog/">Writing</a><a class="btn" href="/resume.pdf">Résumé (PDF)</a></div>
+</main>
+<script>
+  // draw the cat from the same grid as the boot screen (o = eyes, looking to the side)
+  (function () { var CAT = ['....#...........#....','....##.........##....','....###.......###....','....#############....','...###############...','...###############...','...####o#####o####...','...###############...','...#######o#######...','....#############....','.....###########.....','.......#######.......'];
+    var g = document.getElementById('c'), h = ''; CAT.forEach(function (r, y) { r.split('').forEach(function (ch, x) { if (ch !== '.') h += '<circle cx="' + (x * 10 + 5) + '" cy="' + (y * 10 + 5) + '" r="3.6"' + (ch === 'o' ? ' class="o"' : '') + '/>'; }); }); g.innerHTML = h; })();
+</script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark light">
+<meta name="darkreader-lock">
+<title>Proving a root cause before reporting it: Noel Yohannes Ghebremeskel</title>
+<meta name="description" content="RootCause is an on-call agent that finds why a microservice broke, then re-queries the telemetry to prove it before it says anything. Why the loudest service is usually the wrong answer, and why &quot;I don&#39;t know&quot; is a feature.">
+<link rel="canonical" href="https://nyohen.github.io/blog/prove-the-root-cause-first/">
+<meta property="og:type" content="article"><meta property="og:title" content="Proving a root cause before reporting it: Noel Yohannes Ghebremeskel"><meta property="og:description" content="RootCause is an on-call agent that finds why a microservice broke, then re-queries the telemetry to prove it before it says anything. Why the loudest service is usually the wrong answer, and why &quot;I don&#39;t know&quot; is a feature.">
+<meta property="og:url" content="https://nyohen.github.io/blog/prove-the-root-cause-first/"><meta property="og:image" content="https://nyohen.github.io/og.png"><meta name="twitter:card" content="summary_large_image">
+<link rel="alternate" type="application/rss+xml" title="Noel Yohannes Ghebremeskel: writing" href="/blog/feed.xml">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta name="theme-color" content="#16151a">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;900&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/lab/blog.css">
+<script>try{if(localStorage.getItem('nyg-theme2')==='light'){delete document.documentElement.dataset.theme;document.querySelector('meta[name=theme-color]').setAttribute('content','#efe8dc')}}catch(e){}addEventListener('pageswap',function(e){try{if(e.viewTransition&&new URL(e.activation.entry.url).pathname.indexOf('/blog/')!==0)e.viewTransition.skipTransition()}catch(x){}})</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="bar"><a class="logo" href="/" aria-label="Noel Yohannes Ghebremeskel, home">Noel Y.G.</a><nav aria-label="Site"><a href="/">Home</a><a href="/blog/" aria-current="false">Writing</a><a href="/resume.pdf" download="Noel_Yohannes_Ghebremeskel_Resume.pdf">Résumé</a></nav></header>
+<main id="main">
+<article><header class="head"><p class="mono"><a href="/blog/">← Writing</a> · <time datetime="2026-10-17">October 17, 2026</time> · 4 min read</p><h1>Proving a root cause before reporting it</h1><p class="lead">RootCause is an on-call agent that finds why a microservice broke, then re-queries the telemetry to prove it before it says anything. Why the loudest service is usually the wrong answer, and why &quot;I don&#39;t know&quot; is a feature.</p></header>
+<div class="prose"><p>When something breaks in a system of microservices, the first stretch of an incident is spent jumping between dashboards, trying to work out which service actually failed. And the loudest symptom is usually not the cause. When the payment service breaks, checkout and the front end light up too, because they&#39;re waiting on it.</p>
+<p>A confident wrong diagnosis is expensive. It sends people to fix the wrong thing while the outage keeps going. So when I built <strong>RootCause</strong>, an on-call assistant, I wanted its answers to be checkable, not just plausible.</p>
+<h2 id="an-answer-key">An answer key</h2>
+<p>You can&#39;t score a diagnosis without knowing the right answer. The OpenTelemetry Demo, a sample online store made of many microservices, ships with failure switches like <code>paymentFailure</code> and <code>emailMemoryLeak</code>. Flip one, and you know exactly what broke.</p>
+<p>I built a simulator of a 15-service store that follows the demo&#39;s shape and uses 10 of its failure switches. That gave me incidents with a known culprit, so I could measure <strong>top-1 accuracy</strong>: did the agent name the right service and the right kind of failure?</p>
+<h2 id="how-the-agent-works">How the agent works</h2>
+<p>RootCause is a LangGraph agent, and it is strictly <strong>read-only</strong>. It never changes anything; a person acts on what it finds.</p>
+<ol><li><strong>Detect:</strong> a forecast band on each metric flags when something drifts outside normal. No AI here.</li><li><strong>Triage:</strong> rank the suspect services.</li><li><strong>Gather evidence:</strong> query metrics, traces and logs for the top suspects.</li><li><strong>Check the runbook:</strong> retrieve the matching runbook notes.</li><li><strong>Hypothesise:</strong> propose a root cause.</li><li><strong>Verify:</strong> prove it, or loop back.</li></ol>
+<h2 id="the-verifier-re-queries">The verifier re-queries</h2>
+<p>The verifier doesn&#39;t just reread the evidence the agent already used. It asks <strong>fresh, independent questions</strong>: a later time window, with stricter thresholds. For a crash, for example, the suspect needs at least 10% errors on its own spans (at least 3 spans), in a window that adds 4 fresh minutes the evidence step never saw.</p>
+<p>If the hypothesis survives, RootCause reports it. If it doesn&#39;t, the agent widens its search and tries again, up to 3 cycles. After that, it reports <strong>&quot;inconclusive&quot;</strong> instead of guessing.</p>
+<h2 id="the-red-herring">The red herring</h2>
+<p>My simulator includes a deliberately noisy <code>currency</code> service that logs ERROR lines all the time, whether anything is wrong or not. I added it on purpose, because a noisy-but-healthy service is exactly what fools a quick look at the logs.</p>
+<p>I compared RootCause against a naive baseline: blame the service with the most ERROR lines. The baseline blamed <code>currency</code> in 28 of 30 incidents and got <strong>6.7%</strong> right. RootCause got <strong>96.7%</strong> (29 of 30, on simulated data with a rule-based stand-in for the LLM), because it looks at signals that separate a culprit from its victims: errors on a service&#39;s own spans, its own processing time, and its CPU and memory use.</p>
+<p>These numbers are on simulated data, with a rule-based stand-in where the language model would go (more under Honest limits). Over 5 random seeds (150 incidents and 50 healthy runs), RootCause scored <strong>98.0%</strong>. When it confirmed an answer, it was right every time (147 of 147), and it raised <strong>0 false alarms</strong> on the healthy runs.</p>
+<h2 id="inconclusive-is-a-feature">&quot;Inconclusive&quot; is a feature</h2>
+<p>All of the misses were the same case: a weak payment failure (<code>paymentFailure</code> at low intensity). The verifier couldn&#39;t find enough errors in the fresh window, so the agent said &quot;inconclusive&quot;. It never gave a wrong answer with confidence.</p>
+<p>I built it that way on purpose. It costs some recall, but on call, &quot;I can&#39;t prove this yet&quot; is far more useful than a confident wrong answer.</p>
+<h2 id="the-fancy-model-didn-t-win">The fancy model didn&#39;t win</h2>
+<p>I also tried a real pretrained forecasting model (Chronos-Bolt, the tiny version) in place of my simple robust linear forecaster. On this data it made <strong>no measurable difference</strong> (98.0% either way) and was about <strong>7 times slower</strong>. So the simple model stayed as the default.</p>
+<p>That says more about my simulated data, which is close to linear plus noise, than about Chronos. On real, seasonal production metrics a learned forecaster may well win. But I only know which one to use because I measured both.</p>
+<h2 id="honest-limits">Honest limits</h2>
+<ul><li><strong>The data is simulated.</strong> The service names and failure switches follow the OpenTelemetry Demo, but the effect sizes and noise are my own choices. I also tuned the thresholds on this same simulator. Real telemetry will be harder.</li><li><strong>The reasoning step in these tests is a rule-based stand-in, not a real language model.</strong> So 96.7% is a result for the whole pipeline, not a measure of how good an LLM is. Testing against a real model is next.</li><li><strong>It names one culprit per incident.</strong> When two things break at once, it reliably names one real culprit and never blames a victim, but it can&#39;t report both yet.</li></ul>
+<h2 id="what-i-took-from-it">What I took from it</h2>
+<p>Make the agent prove its answer with data it hasn&#39;t already seen. Give it a way to say &quot;I don&#39;t know&quot;. And measure the fancy option before you adopt it.</p>
+<p><em>RootCause is built with Python, LangGraph, FastAPI, React and TypeScript, with parsers for Prometheus, Jaeger and JSON-lines logs, and it has 52 automated tests in CI. The repo is private while I finish it.</em></p></div>
+<p class="end mono"><a href="/blog/">← All writing</a> · <a href="/">Portfolio</a></p></article>
+</main>
+<footer class="foot mono"><a href="/">Noel Yohannes Ghebremeskel</a> · Toronto · <a href="mailto:yohannesghebremesk@gmail.com">Email</a> · <a href="https://linkedin.com/in/noel-yohannes">LinkedIn</a> · <a href="https://github.com/nyohen">GitHub</a> · <a href="/blog/feed.xml">RSS</a></footer>
+</body>
+</html>

@@ -64,12 +64,12 @@ html.cpanel-open { overflow: hidden; }
 .cpanel ul.ev button:hover { border-color: var(--c-ink); }
 
 /* case bar under Projects: light style on the cream page */
-.cbar.inline ul { background: transparent; border: 1px solid var(--rule, rgba(57,56,55,.18)); backdrop-filter: none; }
+.cbar.inline ul { background: transparent; border: 1px solid var(--rule, var(--rule, rgba(57,56,55,.18))); backdrop-filter: none; }
 .cbar.inline button { color: var(--ink, #393837); }
-.cbar.inline button:hover { background: rgba(57,56,55,.08); }
+.cbar.inline button:hover { background: var(--rule-faint, rgba(57,56,55,.08)); }
 .cbar.inline button[aria-current='true'] { background: var(--ink, #393837); color: var(--paper, #efe8dc); }
 .cbar.inline { --ring: var(--ink, #393837); }
-.cbar.inline button i { box-shadow: 0 0 0 1px rgba(57,56,55,.4); }   /* pale dots (school, contact) stay visible on cream */
+.cbar.inline button i { box-shadow: 0 0 0 1px var(--rule-strong, rgba(57,56,55,.4)); }   /* pale dots (school, contact) stay visible on cream */
 
 /* MPAC group: one button that slides open to the right to show Co-op and Contract */
 .cbar li.grp { display: inline-flex; align-items: center; }

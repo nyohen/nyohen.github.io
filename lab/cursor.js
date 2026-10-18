@@ -26,7 +26,8 @@
   addEventListener('pointermove', (e) => { if (e.pointerType !== 'mouse' && e.pointerType !== 'pen') return; mx = e.clientX; my = e.clientY;
     if (!moved) { x = mx; y = my; moved = true; } lastMove = performance.now(); el.style.opacity = '1'; }, { passive: true });
   document.addEventListener('pointerleave', () => (el.style.opacity = '0'));
-  addEventListener('pointerover', (e) => (over = !!e.target.closest('a,button,[role=button],.lbl,.node')), { passive: true });
+  let onDots = false;   // the dot blocks draw their own small plus cursor, so the starburst steps aside there
+  addEventListener('pointerover', (e) => { over = !!e.target.closest('a,button,[role=button],.lbl,.node'); onDots = !!e.target.closest('canvas[data-dots]'); el.style.visibility = onDots ? 'hidden' : ''; }, { passive: true });
   const loop = (now) => {
     const k = still ? 1 : .2; x += (mx - x) * k; y += (my - y) * k;
     el.style.transform = `translate(${x}px, ${y}px)`;

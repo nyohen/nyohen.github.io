@@ -1,5 +1,5 @@
 // Shared page content for the home page. Fills the text parts from content.js (one source of facts), runs the clock and
-// the checkbox nav. The interactive centrepiece is mounted by the page. folioParts() has no DOM use, so the build also
+// (section marking: nav.js). The interactive centrepiece is mounted by the page. folioParts() has no DOM use, so the build also
 // calls it to write the same text into index.html for visitors without JavaScript (vite.config.ts, prerender plugin).
 window.folioParts = (P) => {
   const C = Object.fromEntries(P.cases.map((c) => [c.id, c]));
@@ -40,14 +40,5 @@ window.mountFolio = () => {
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const f = t.querySelector('.fact'), seq = [...facts.slice(1), facts[0]];
     seq.forEach((txt, i) => setTimeout(() => { f.classList.add('out'); setTimeout(() => { f.textContent = txt; f.classList.remove('out'); }, 220); }, 1700 * (i + 1))); });
-  // sub-menu under the centrepiece item: one entry per case study
-  document.querySelectorAll('nav.check .sub').forEach((sub) => { sub.innerHTML = P.cases.map((c) => `<button type="button" data-case="${c.id}">${esc(c.title)}</button>`).join('');
-    sub.querySelectorAll('button').forEach((b) => b.addEventListener('click', () => window.CaseUI && window.CaseUI.open(b.dataset.case, b))); });
-  const links = [...document.querySelectorAll('nav.check a')];
-  const mark = (id) => links.forEach((a) => { const on = a.dataset.s === id; a.querySelector('b').textContent = on ? '[●]' : '[ ]'; on ? a.setAttribute('aria-current', 'true') : a.removeAttribute('aria-current'); });
-  const io = new IntersectionObserver((es) => es.forEach((e) => e.isIntersecting && mark(e.target.id)), { rootMargin: '-40% 0px -55% 0px' });
-  links.forEach((a) => { const el = document.getElementById(a.dataset.s); if (el) io.observe(el);
-    a.addEventListener('pointerenter', () => { if (!a.hasAttribute('aria-current')) a.querySelector('b').textContent = '[●]'; });
-    a.addEventListener('pointerleave', () => { if (!a.hasAttribute('aria-current')) a.querySelector('b').textContent = '[ ]'; }); });
-  mark('top');
+  // section marking in the bottom bar lives in nav.js
 };

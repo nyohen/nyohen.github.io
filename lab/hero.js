@@ -1,7 +1,7 @@
 // Hero band: the name cut out of the page as torn letters (gchf idea), with a live 2D drawing showing through.
 // mountHero(band, 'galaxy' | 'signal'). The page colour covers everything except the letters. Light: 2D canvas only.
-// Motion stops by itself (WCAG 2.2.2, no pause button needed): it plays ~5 s after load, eases to a still frame, and plays
-// another ~5 s when the pointer enters the band or it is tapped. Off screen the clock pauses. Reduced motion: one still frame.
+// Motion: plays forever while on screen; the bottom bar's "Stars" toggle pauses it (WCAG 2.2.2). Off screen it stops drawing.
+// Reduced motion: one still frame.
 window.mountHero = (band, mode) => {
   const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const paper = getComputedStyle(document.documentElement).getPropertyValue('--paper').trim() || '#efe8dc';
@@ -10,7 +10,7 @@ window.mountHero = (band, mode) => {
       <filter id="tear" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency=".022" numOctaves="3" seed="4" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="30" xChannelSelector="R" yChannelSelector="G"/></filter>
       <mask id="cut" maskUnits="userSpaceOnUse"><rect width="100%" height="100%" fill="#fff"/><g filter="url(#tear)"><text x="50%" y="50%" text-anchor="middle" dominant-baseline="central" fill="#000"
         font-family="Archivo, Inter Tight, sans-serif" font-weight="900" letter-spacing="-.05em">NOEL</text></g></mask></defs>
-      <rect width="100%" height="100%" fill="${paper}" mask="url(#cut)"/></svg><span class="sr">Noel</span>`;
+      <rect width="100%" height="100%" fill="${paper}" style="fill: var(--paper)" mask="url(#cut)"/></svg><span class="sr">Noel</span>`;
   const cv = band.querySelector('canvas'), g = cv.getContext('2d'), text = band.querySelector('text');
   let W = 0, H = 0;
   // the word is sized from its measured box so the whole of NOEL (and its torn edge) fits the band at every width:
@@ -44,18 +44,16 @@ window.mountHero = (band, mode) => {
         const px = ((t * 120 * (1 + (r % 3) * .4) + r * 97) % (W + 200)) - 100; g.fillStyle = hot ? '#ff4b1f' : '#e9ff3a'; g.beginPath(); g.arc(px, y + Math.sin(px * .006 + t * sp + r) * 14, 6, 0, 7); g.fill(); }
     },
   };
-  // time only advances while playing; speed eases in over .4 s and out over the last 1.5 s, so it settles instead of freezing
-  const PLAY = 5000, IN = 400, OUT = 1500;
-  let visible = true, raf = 0, tt = still ? 3 : 0, last = performance.now(), start = last, until = still ? 0 : last + PLAY, left = 0;
-  const speed = (now) => Math.min(1, (now - start) / IN, Math.max(0, (until - now) / OUT));
-  const loop = (now) => { raf = 0; const v = speed(now); tt += Math.min(.1, (now - last) / 1000) * v; last = now; draw[mode](tt);
-    if (visible && now < until) raf = requestAnimationFrame(loop); };
-  const play = () => { if (still) return; const now = performance.now(); start = now - speed(now) * IN; until = now + PLAY;   // carries on from the current speed
-    if (visible && !raf) { last = now; raf = requestAnimationFrame(loop); } };
-  new IntersectionObserver(([e]) => { const now = performance.now(); visible = e.isIntersecting;
-    if (!visible) { left = Math.max(0, until - now); if (raf) { cancelAnimationFrame(raf); raf = 0; } }
-    else if (left > 0) { until = now + left; left = 0; last = now; if (!raf) raf = requestAnimationFrame(loop); } }).observe(band);
-  band.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse' || e.pointerType === 'pen') play(); });
-  band.addEventListener('click', play);   // tap on touch screens (and click with a mouse)
-  raf = requestAnimationFrame(loop);
+  // plays forever (Noel, 2026-10-18) while the band is on screen; the bottom bar's "Stars" toggle pauses it too (window.MOTION,
+  // WCAG 2.2.2). Speed eases toward its target (.5 s), so pausing or scrolling away settles instead of freezing. Reduced motion: one still frame.
+  let visible = true, raf = 0, tt = still ? 3 : 0, last = performance.now(), v = 0;
+  const target = () => (visible && !document.hidden && !(window.MOTION && window.MOTION.paused) ? 1 : 0);
+  const loop = (now) => { raf = 0; const dt = Math.min(.1, (now - last) / 1000), tg = target(); last = now;
+    v += (tg - v) * Math.min(1, dt * 3.5); if (!tg && v < .03) v = 0; tt += dt * v; draw[mode](tt);
+    if (tg || v > 0) raf = requestAnimationFrame(loop); };
+  const wake = () => { if (still || raf || !target()) return; last = performance.now(); raf = requestAnimationFrame(loop); };
+  new IntersectionObserver(([e]) => { visible = e.isIntersecting; wake(); }).observe(band);
+  document.addEventListener('visibilitychange', wake);
+  addEventListener('motionchange', wake);
+  if (still) draw[mode](tt); else raf = requestAnimationFrame(loop);
 };

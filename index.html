@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="no-js" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,7 +7,9 @@
 <meta name="description" content="Noel Yohannes Ghebremeskel, full-stack developer in Toronto. Canadian citizen, open to Winter and Summer 2027 internships or co-ops. Projects, experience and skills: AI agents checked by plain code, React, FastAPI and AWS.">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<meta name="theme-color" content="#efe8dc">
+<meta name="theme-color" content="#16151a">
+<meta name="color-scheme" content="dark light">
+<meta name="darkreader-lock"><!-- Dark Reader leaves the designed colours alone (it was hiding text) -->
 <!-- Share previews (site published at https://nyohen.github.io/, 2026-10-17). -->
 <link rel="canonical" href="https://nyohen.github.io/">
 <meta property="og:url" content="https://nyohen.github.io/">
@@ -21,30 +23,19 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;900&family=Geist+Mono:wght@400;500&family=Fragment+Mono&family=Inter:wght@400;500;600&family=Inter+Tight:wght@800;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/lab/case-ui.css" ><link rel="stylesheet" href="/lab/folio.css" >
+<script>/* theme before first paint: dark by default (set on <html>); saved choice ('nyg-theme2') or ?theme=dark|light for testing */try{var t=(location.search.match(/[?&]theme=(dark|light)/)||[])[1]||localStorage.getItem('nyg-theme2');if(t==='light'){delete document.documentElement.dataset.theme;document.querySelector('meta[name=theme-color]').setAttribute('content','#efe8dc')}}catch(e){}</script>
+<script>/* boot screen on every load except deep links (#contact etc.), never with reduced motion (see /lab/boot.js); ?boot=0 skips it */var d=document.documentElement;d.classList.remove('no-js');try{if(!/[?&]boot=0/.test(location.search)&&!location.hash&&!matchMedia('(prefers-reduced-motion: reduce)').matches){d.classList.add('boot');setTimeout(function(){d.classList.remove('boot')},7000)}}catch(e){}</script>
 </head>
 <body>
+<div class="boot-screen"><p class="boot-tl mono">NYG <i>//</i> portfolio</p><p class="boot-tr mono boot-clock">Toronto</p>
+  <div class="boot-mid"><div class="boot-cat"></div><p class="boot-name mono" aria-hidden="true" data-name="Noel Yohannes Ghebremeskel">Noel Yohannes Ghebremeskel</p><p class="boot-prog mono"><span class="boot-bar" aria-hidden="true"></span><span class="boot-n" aria-hidden="true">000</span></p></div>
+  <div class="boot-log mono" aria-hidden="true"></div><button type="button" class="boot-skip mono">Skip intro</button></div>
+<script src="/lab/boot.js" ></script>
 <a class="skip" href="#top">Skip to content</a>
 <!-- Home page (Noel chose Version A "Orbit", 2026-10-17). The empty comment slots below are filled from public/lab/content.js at build time. -->
 <div class="rules" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-<aside class="rail">
-  <a class="logo tight" href="#top" aria-label="Noel Yohannes Ghebremeskel, back to top">Noel Y.G.</a>
-  <nav class="check" aria-label="Sections">
-    <a href="#top" data-s="top"><b>[ ]</b>Index<span class="n">01</span></a>
-    <a href="#system" data-s="system"><b>[ ]</b>How I build<span class="n">02</span></a>
-    <div class="item"><a href="#projects" data-s="projects"><b>[ ]</b>Projects<span class="n">03</span></a><div class="sub" aria-label="Case studies"></div></div>
-    <a href="#experience" data-s="experience"><b>[ ]</b>Experience<span class="n">04</span></a>
-    <a href="#education" data-s="education"><b>[ ]</b>Education<span class="n">05</span></a>
-    <a href="#toolkit" data-s="toolkit"><b>[ ]</b>Toolkit<span class="n">06</span></a>
-    <a href="#contact" data-s="contact"><b>[ ]</b>Contact<span class="n">07</span></a>
-    
-  </nav>
-  <div class="foot">
-    <div><a href="/resume.pdf" download="Noel_Yohannes_Ghebremeskel_Resume.pdf">Résumé (PDF)</a><a href="https://github.com/nyohen">GitHub</a><a href="https://linkedin.com/in/noel-yohannes">LinkedIn</a></div>
-  </div>
-</aside>
 
 <main id="top">
-  <div class="topbar mono"><span><span class="clock"></span>Toronto · Eastern Time</span><span class="right"><a data-mail="text" href="mailto:yohannesghebremesk@gmail.com">yohannesghebremesk@<wbr>gmail.com</a></span></div>
   <section>
     <div id="band" class="hero-band"></div>
     <div class="hero-text">
@@ -65,7 +56,19 @@
 
   <section class="row" id="projects">
     <h2 class="tight">Projects</h2><p class="side mono">[ two builds · 2026 ]</p>
-    <p class="lead">Two AI agents where plain code, not the AI, has the final say. Each one has automated tests in CI.</p>
+    <div class="play" data-play="projects">
+  <div class="dots-box proj-dots"><p class="dots-cap mono"><span class="ping" aria-hidden="true"></span><span><span class="click">Click</span><span class="tap">Tap</span> to plant a flower</span><span class="n" aria-live="polite"></span><button type="button" class="dots-pause" aria-pressed="false" aria-label="Pause garden" data-what="garden"><span aria-hidden="true">❚❚</span></button></p>
+      <canvas data-dots="garden" tabindex="0" role="button" aria-label="A garden. Click, tap or press Enter to plant a flower, or click near one to grow it. Each flower also unlocks the next part of this section."></canvas>
+      <p class="play-foot mono"><span class="play-hint" aria-hidden="true">Plant a flower to unlock the next part</span><button type="button" class="play-all mono">Show all</button></p></div>
+      <div class="play-info">
+        <p class="play-strip mono"><span>[ two builds · 2026 ]</span><span class="play-n" aria-hidden="true">0 / 3 unlocked</span></p>
+      <p class="lead">Two AI agents where plain code, not the AI, has the final say. Each one has automated tests in CI.</p>
+      <ul class="play-rows mono" data-unlock-rows>
+        <li><a href="#casefile"><b>Casefile</b> <i>// [2026]</i><span>AI investigation assistant</span></a></li>
+        <li><a href="#rootcause"><b>RootCause</b> <i>// [2026]</i><span>Incident diagnosis agent</span></a></li>
+      </ul>
+      </div>
+    </div>
     <div class="full"><div class="projects" id="projects-list"><article class="proj"><p class="mono kind">Project · 2026</p>
       <h3 class="tight">Casefile</h3><p class="what">AI investigation assistant</p><p class="out">Drafts anti-money-laundering case write-ups where plain code, not the AI, checks every figure.</p>
       <dl><div><dt class="tight">417 / 417</dt><dd>deliberately corrupted claims flagged</dd></div><div><dt class="tight">0 / 994</dt><dd>clean claims falsely flagged</dd></div><div><dt class="tight">36</dt><dd>automated tests in CI</dd></div></dl>
@@ -74,8 +77,7 @@
       <h3 class="tight">RootCause</h3><p class="what">Incident diagnosis agent</p><p class="out">An on-call agent that finds why a microservice broke, then re-queries the telemetry to prove it before it reports.</p>
       <dl><div><dt class="tight">15</dt><dd>services in the simulated store</dd></div><div><dt class="tight">10</dt><dd>failure flags with known answers</dd></div><div><dt class="tight">52</dt><dd>automated tests in CI</dd></div></dl>
       <p class="mono stack"><span>Python</span><span>LangGraph</span><span>FastAPI</span><span>React</span><span>TypeScript</span><span>Prometheus</span><span>Jaeger</span><span>Docker</span><span>GitHub Actions</span></p>
-      <p class="limits"><b>Limits:</b> Simulated incidents and a stand-in model so far; the telemetry parsers are tested on fixtures only.</p><a class="btn" href="#rootcause" data-case="rootcause">Read the case study →</a></article></div><div id="barhere"></div>
-      <p class="maplink mono"><a href="/map.html">[ see all my work as an interactive map → ]</a></p></div>
+      <p class="limits"><b>Limits:</b> Simulated incidents and a stand-in model so far; the telemetry parsers are tested on fixtures only.</p><a class="btn" href="#rootcause" data-case="rootcause">Read the case study →</a></article></div><div id="barhere"></div></div>
   </section>
 
   <section class="row invert" id="experience">
@@ -87,26 +89,59 @@
 
   <section class="row" id="education">
     <h2 class="tight">Education</h2><p class="side mono">[ diploma + degree ]</p>
-    <div class="jobs" id="schools"><div class="job"><div class="head"><h3>York University</h3><p class="org"><strong>BA, Specialized Honours in Digital Media (Development Stream)</strong><br>Lassonde School of Engineering</p></div>
+    <div class="play" data-play="education">
+      <div class="dots-box edu-dots"><p class="dots-cap mono"><span class="ping" aria-hidden="true"></span><span><span class="click">Click</span><span class="tap">Tap</span> to launch one</span><span class="n" aria-live="polite"></span><button type="button" class="dots-pause" aria-pressed="false" aria-label="Pause fireworks" data-what="fireworks"><span aria-hidden="true">❚❚</span></button></p>
+      <canvas data-dots="fireworks" tabindex="0" role="button" aria-label="Fireworks over Toronto. Click, tap or press Enter to launch one."></canvas>
+      </div>
+      <div class="play-info">
+        <p class="play-strip mono"><span>[ diploma + degree ]</span></p>
+      <div class="jobs" id="schools"><div class="job"><div class="head"><h3>York University</h3><p class="org"><strong>BA, Specialized Honours in Digital Media (Development Stream)</strong><br>Lassonde School of Engineering</p></div>
       <ul class="pts"><li>Coursework: Advanced Object-Oriented Programming, Software Tools, User Interfaces, Creative Coding I, Applied Linear Algebra, Discrete Math for Computer Science, Intro to Game Development for non-Majors, Multimedia Asset Creation I.</li></ul><p class="meta mono"><span>Expected 2027</span></p></div><div class="job"><div class="head"><h3>Seneca Polytechnic</h3><p class="org"><strong>Advanced Diploma, Computer Programming &amp; Analysis</strong><br>Toronto</p></div>
       <ul class="pts"><li>President’s Honour List (4.0 term GPA), May 2022.</li><li>Coursework: Cloud Computing for Programmers, Software Analysis and Design, Project Planning and Management.</li><li>Included a co-op term at MPAC (2023).</li></ul><p class="meta mono"><span>2020 – 2023</span></p></div></div>
+      </div>
+    </div>
   </section>
 
   <section class="row" id="toolkit">
     <h2 class="tight">Toolkit</h2><p class="side mono">[ grouped like job postings ]</p>
-    <div class="skills" id="skills"><div><p class="mono">Languages</p><p>Python, TypeScript, JavaScript, SQL, HTML, CSS</p></div><div><p class="mono">Front end</p><p>React, Intro.js</p></div><div><p class="mono">Back end &amp; data</p><p>FastAPI, REST APIs, AWS Redshift, SQLite, Excel</p></div><div><p class="mono">Cloud &amp; DevOps</p><p>AWS Lambda, Cognito, Amplify, QuickSight, Docker, Kubernetes, GitHub Actions</p></div><div><p class="mono">AI systems</p><p>LangGraph agents, verification loops, evaluation harnesses</p></div><div><p class="mono">Tools</p><p>Git, Jira, ArcGIS Online, Flowable, pytest</p></div></div>
+    <div class="skills" id="skills"><div><p class="mono">Languages</p><p>Python, TypeScript, JavaScript, SQL, HTML, CSS</p></div><div><p class="mono">Front end</p><p>React, Intro.js</p></div><div><p class="mono">Back end &amp; data</p><p>FastAPI, REST APIs, AWS Redshift, SQLite, Excel</p></div><div><p class="mono">Cloud &amp; DevOps</p><p>AWS Lambda, Cognito, Amplify, QuickSight, Docker, Kubernetes, GitHub Actions</p></div><div><p class="mono">AI systems</p><p>LangGraph agents, verification loops, evaluation harnesses</p></div><div><p class="mono">Tools</p><p>Git, Jira, ArcGIS Online, Flowable, pytest</p></div><div><p class="mono">Spoken languages</p><p>English, Italian, Tigrinya</p></div></div>
   </section>
 
   <section class="row contact" id="contact">
     <h2 class="tight">Hiring for Winter or Summer 2027?</h2><p class="side mono">[ canadian citizen · eastern time ]</p>
     <a class="mail tight" data-mail="text" href="mailto:yohannesghebremesk@gmail.com">yohannesghebremesk@<wbr>gmail.com</a>
-    <div class="links"><a href="/resume.pdf" download="Noel_Yohannes_Ghebremeskel_Resume.pdf">Résumé (PDF)</a><a href="https://linkedin.com/in/noel-yohannes">LinkedIn</a><a href="https://github.com/nyohen">GitHub</a></div>
+    <div class="links"><a href="/resume.pdf" download="Noel_Yohannes_Ghebremeskel_Resume.pdf">Résumé (PDF)</a><a href="https://linkedin.com/in/noel-yohannes">LinkedIn</a><a href="https://github.com/nyohen">GitHub</a><a href="/blog/">Writing</a></div>
     <p class="bigname tight" aria-hidden="true">Noel Yohannes<br>Ghebremeskel</p>
+    <div class="scene full"><p class="dots-cap mono"><span class="ping" aria-hidden="true"></span><span class="scene-now">Toronto</span><span class="n" aria-live="polite"></span><button type="button" class="dots-pause" aria-pressed="false" aria-label="Pause sunset" data-what="sunset"><span aria-hidden="true">❚❚</span></button></p>
+      <div class="dots-box"><canvas data-dots="sunset" tabindex="0" role="button" aria-label="The sky over the water in Toronto right now: the sun or moon where it really is. Dolphins, a shark, fish and a whale pass by. Click or press Enter on the water to make a fish or dolphin jump; click the sky by day to send a bird off."></canvas></div></div>
   </section>
 </main>
+
+<!-- Fixed bar at the bottom (samgoddard.co.uk's footer bar, our own code): socials // sections // clock. Phones: Menu opens a sheet upward. -->
+<div class="fbar mono">
+  <button type="button" class="fb-menu" aria-expanded="false" aria-controls="fb-sheet">Menu</button>
+  <div class="fb-sheet" id="fb-sheet">
+    <nav class="fb-c" aria-label="Sections">
+      <a href="#top" data-s="top"><b aria-hidden="true">●</b>Index</a><i aria-hidden="true">//</i>
+      <a href="#system" data-s="system"><b aria-hidden="true">●</b>How I build</a><i aria-hidden="true">//</i>
+      <a href="#projects" data-s="projects"><b aria-hidden="true">●</b>Projects</a><i aria-hidden="true">//</i>
+      <a href="#experience" data-s="experience"><b aria-hidden="true">●</b>Experience</a><i aria-hidden="true">//</i>
+      <a href="#education" data-s="education"><b aria-hidden="true">●</b>Education</a><i aria-hidden="true">//</i>
+      <a href="#toolkit" data-s="toolkit"><b aria-hidden="true">●</b>Toolkit</a><i aria-hidden="true">//</i>
+      <a href="#contact" data-s="contact"><b aria-hidden="true">●</b>Contact</a><i aria-hidden="true">//</i><a href="/blog/" data-s="blog"><b aria-hidden="true">●</b>Blog</a>
+    </nav>
+    <nav class="fb-l" aria-label="Elsewhere">
+      <a href="https://linkedin.com/in/noel-yohannes">LinkedIn</a><i aria-hidden="true">//</i><a href="https://github.com/nyohen">GitHub</a><i aria-hidden="true">//</i><a data-mail href="mailto:yohannesghebremesk@gmail.com">Email</a><i aria-hidden="true">//</i><a href="/resume.pdf" download="Noel_Yohannes_Ghebremeskel_Resume.pdf">Résumé</a>
+    </nav>
+  </div>
+  <p class="fb-now" aria-hidden="true"></p>
+  <p class="fb-r"><button type="button" class="fb-theme" role="switch" aria-checked="true" hidden><span class="tw tl" aria-hidden="true">Light</span><span class="tk" aria-hidden="true"></span><span class="tw td">Dark</span></button><button type="button" class="fb-stars" aria-pressed="false" hidden>Stars <span aria-hidden="true">❚❚</span></button><span class="clock"></span></p>
+</div>
 <noscript><p style="background:#ecebe6;padding:1rem;margin:0">The pipeline diagram and case-study panels need JavaScript; everything else on this page is plain text.</p></noscript>
 
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.27/dist/lenis.min.js" defer ></script>
 <script src="/lab/content.js" ></script><script src="/lab/scenes.js" ></script><script src="/lab/case-ui.js" ></script><script src="/lab/hero.js" ></script><script src="/lab/folio.js" ></script><script src="/lab/burst.js" defer ></script><script src="/lab/cursor.js" defer ></script><script src="/lab/system-diagram.js" ></script>
 <script src="/lab/home.js" ></script>
+<script src="/lab/stars.js" ></script><script src="/lab/dots.js" ></script><script src="/lab/unlock.js" ></script><script src="/lab/reveal.js" ></script><script src="/lab/nav.js" defer ></script>
 </body>
 </html>
