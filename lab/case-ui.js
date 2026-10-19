@@ -86,7 +86,7 @@ window.CaseUI = (() => {
   const api = {
     cases: CASES,
     mount(h = {}) {
-      hooks = h; if (h.barInto) { bar.classList.add('inline'); h.barInto.appendChild(bar); document.body.append(scrim, panel); } else document.body.append(bar, scrim, panel);   // barInto: put the bar inside a page section
+      hooks = h; if (h.bar === false) document.body.append(scrim, panel); else if (h.barInto) { bar.classList.add('inline'); h.barInto.appendChild(bar); document.body.append(scrim, panel); } else document.body.append(bar, scrim, panel);   // barInto: put the bar inside a page section; bar: false = no bar (the home page, Noel: it repeated links)
       scrim.addEventListener('click', () => api.close());
       bar.querySelectorAll('button[data-id]').forEach((b) => b.addEventListener('click', () => api.open(b.dataset.id, b)));
       addEventListener('keydown', (e) => { if (e.key === 'Escape' && isOpen) api.close(); });

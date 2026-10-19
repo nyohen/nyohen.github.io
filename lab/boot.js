@@ -226,7 +226,8 @@
       if (held && held.o === p) { p.vx = p.vy = 0; } else { p.x += (p.vx * dt) / W; p.y += (p.vy * dt) / H; const f = Math.exp(-dt * 1.2); p.vx *= f; p.vy *= f;
         if (p.x < -0.05 || p.x > 1.05) { p.vx = -p.vx * 0.6; p.x = Math.max(-0.05, Math.min(1.05, p.x)); } if (p.y < -0.05 || p.y > 1.05) { p.vy = -p.vy * 0.6; p.y = Math.max(-0.05, Math.min(1.05, p.y)); } }
       const [x, y] = rot(p.x * W, p.y * H);
-      if (phase !== 'idle' && Math.hypot(x - CX, y - ecy) < er + rad * 0.5) { boom(x, y, p.hole ? 30 : 70); if (!p.hole) boom(x, y, 30, 3); p.dead = ms; destroyed++; continue; }   // the growing planet swallows it: boom
+      // touching the big planet (thrown, dropped, or swallowed as it grows): boom
+      if (!(held && held.o === p) && Math.hypot(x - CX, y - ecy) < er + rad * 0.5) { boom(x, y, p.hole ? 30 : 70); if (!p.hole) boom(x, y, 30, 3); p.dead = ms; destroyed++; continue; }   // the growing planet swallows it: boom
       if (p.hole) hole(x, y, rad, tn);
       else { if (p.ring) ring(x, y, rad, false, p.ring); ball(x, y, rad, p.c, p.c2, tn * p.sp); if (p.ring) ring(x, y, rad, true, p.ring);
         if (p.moon) { const mo = tn * 0.9; ball(x + Math.cos(mo) * rad * 2.6, y + Math.sin(mo) * rad * 0.8, Math.max(3, rad * 0.22), 0, 0, 0); } }
@@ -346,10 +347,18 @@
   if (clock) clock.textContent = `Toronto ${tor()}`;
   // name decodes from random glyphs, left to right; typed boot log
   const nameEl = el.querySelector('.boot-name'), NAME = nameEl.dataset.name, GL = '01#*+=/<>[]{}NYG';
-  // typed lines: a pretend system boot (Noel: no personal lines or project stats here). The cores and the display size are the visitor's own.
-  const small = innerWidth < 600, cores = navigator.hardwareConcurrency || 4;
-  const LOG = ['nyg-os 4.0 · cold boot', 'bios check ............ ok', ...(small ? [] : [`cpu · ${cores} cores ........... ok`]), `display · ${innerWidth}×${innerHeight} ...... ok`,
-    ...(small ? [] : ['mounting /dev/space .... ok', 'loading star map ....... ok']), 'planet online .......... ok', 'waiting for input'];
+  // typed lines: a pretend system boot, using the visitor's real device (Noel): logical CPU cores, the screen's real resolution in physical
+  // pixels and its pixel ratio, and the graphics chip if the browser will say. A line the browser won't answer is left out, never made up.
+  // (Read here, shown here; nothing is sent anywhere.)
+  const small = innerWidth < 600, dprNow = devicePixelRatio || 1, cores = navigator.hardwareConcurrency;
+  const gpu = (() => { try { const gl = document.createElement('canvas').getContext('webgl'), ext = gl && gl.getExtension('WEBGL_debug_renderer_info');
+    const name = ext ? gl.getParameter(ext.UNMASKED_RENDERER_WEBGL) : ''; gl && gl.getExtension('WEBGL_lose_context') && gl.getExtension('WEBGL_lose_context').loseContext();
+    const raw = String(name || ''), m = raw.match(/Renderer:\s*([^,)]+)/), parts = raw.replace(/^ANGLE \((.*)\)$/, '$1').split(',');   // e.g. 'ANGLE (Apple, ANGLE Metal Renderer: Apple M3 Pro, …)' -> 'apple m3 pro'
+    return (m ? m[1] : parts[1] || parts[0]).replace(/\s*\(.*?\)/g, '').replace(/direct3d.*$/i, '').trim().toLowerCase().slice(0, 28); } catch (e) { return ''; } })();
+  const checks = ['bios check', ...(cores && !small ? [`cpu · ${cores} cores`] : []), ...(gpu && !small ? [`gpu · ${gpu}`] : []), `display · ${Math.round(screen.width * dprNow)}×${Math.round(screen.height * dprNow)} @${+dprNow.toFixed(2)}x`,
+    ...(small ? [] : ['mounting /dev/space', 'loading star map']), 'planet online'];
+  const col = Math.max(...checks.map((t) => t.length)) + 3;   // every "ok" in one column
+  const LOG = ['nyg-os 4.0 · cold boot', ...checks.map((t) => `${t} ${'.'.repeat(col - t.length)} ok`), 'waiting for input'];
   // the game score, bottom right: the space war, everything destroyed, and Darkon's beam hits once he's here (no tips: Noel wants people to explore)
   const score = { 1: 0, 2: 0 }; let destroyed = 0, beamHits = 0, liveEl = null;
   const say_ = (txt) => { const p = document.createElement('p'); p.textContent = txt; logEl.appendChild(p); };
@@ -435,9 +444,9 @@
     // speech bubble up and to the right of the head, with a gap (kept on screen on narrow phones): "Ciao, I'm Noel", it clears, "Choose Me"; then a growing "WOOOO"
     if (head && ms > 1050) { const txt = mode === 'spin' || mode === 'darkSpin' ? `W${'O'.repeat(Math.min(9, 2 + Math.floor((now - tSpin) / 180)))}` : ms < 2850 ? 'Ciao, I’m Noel' : ms < 3250 ? '' : dk && tm - SEQ_T < 1.2 ? '…' : dk && tm - SEQ_T < 3.6 ? 'Darkon is.' : beam ? 'Begone!' : m && m.move === 'toe' ? 'Hee-hee!' : 'Choose Me';
       say.classList.toggle('red', dk);
-      if (txt && txt !== said) say.textContent = said = txt; say.classList.toggle('on', !!txt);
+      if (txt && txt !== said) say.textContent = said = txt; say.classList.toggle('on', !!txt && !(phase !== 'idle' && head[1] < 30));   // as the planet grows he rises off the top: the bubble goes with him
       say.style.setProperty('--s', Math.min(2.4, hgt / Math.max(70, R0 * 0.5)).toFixed(3));
-      say.style.translate = `${Math.min(head[0] + hgt * 0.3 + 12, W - say.offsetWidth * Math.min(2.4, hgt / Math.max(70, R0 * 0.5)) - 10).toFixed(1)}px ${Math.max(head[1] - hgt * 0.32 - 10, (W < 600 ? 84 : 8) + say.offsetHeight * Math.min(2.4, hgt / Math.max(70, R0 * 0.5))).toFixed(1)}px`; say.style.marginTop = `-${say.offsetHeight}px`; }
+      say.style.translate = `${Math.min(head[0] + hgt * 0.3 + 12, W - say.offsetWidth * Math.min(2.4, hgt / Math.max(70, R0 * 0.5)) - 10).toFixed(1)}px ${Math.max(head[1] - hgt * 0.32 - 10, phase !== 'idle' ? -1e4 : (W < 600 ? 84 : 8) + say.offsetHeight * Math.min(2.4, hgt / Math.max(70, R0 * 0.5))).toFixed(1)}px`; say.style.marginTop = `-${say.offsetHeight}px`; }
     // name + log (before the click)
     const nk = Math.max(0, Math.min(1, (ms - 900) / 1200)), fixed = Math.floor(nk * NAME.length);
     nameEl.textContent = [...NAME].map((ch, i) => (i < fixed || ch === ' ' ? ch : ms < 900 && i > 0 ? ' ' : GL[(Math.random() * GL.length) | 0])).join('');
