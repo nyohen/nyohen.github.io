@@ -145,7 +145,7 @@
     draw(fade);
     loop();
   };
-  const running = () => !document.hidden && !root.classList.contains('cpanel-open') && !window.MOTION.paused;
+  const running = () => !document.hidden && !root.classList.contains('cpanel-open') && !root.classList.contains('boot') && !window.MOTION.paused;   // (paused under the boot screen)
   function loop() { if (!raf && running()) raf = requestAnimationFrame(frame); }
   const wake = () => { if (!raf && running()) { last = performance.now(); lastY = scrollY; raf = requestAnimationFrame(frame); } };
   let q = 0; const still = () => { if (!running() && !q) q = requestAnimationFrame(() => { q = 0; draw(1); }); };   // paused: colours still follow the page

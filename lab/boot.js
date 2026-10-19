@@ -19,22 +19,29 @@
   if (!root.classList.contains('boot')) { el.remove(); return; }
   const R = (a, b) => a + Math.random() * (b - a);
   const cv = el.querySelector('.boot-world'), g = cv.getContext('2d'), go = el.querySelector('.boot-go'), say = el.querySelector('.boot-say'), mid = el.querySelector('.boot-mid');
-  const GROW = 2300, SLOW = 1700;   // ms: spin + grow, slow down + fade
+  const GROW = 1500, SLOW = 1000;   // ms: spin + grow, slow down + fade (about 2.5 s from the click to the site)
 
   // the same material as the sunset block (dots.js): a 5 px dot grid, 20 brightness levels, dots up to 2.2 px, warm grey / orange / blue on #131217
   const S = 5, LV = 20, TAU = Math.PI * 2, BG = '#131217', COL = ['rgb(222, 216, 206)', 'rgb(255, 106, 64)', 'rgb(138, 164, 255)', 'rgb(228, 36, 44)'];   // + crimson, only for Darkon's eyes, his eye beams and Pyrokos' fire
   let W = 0, H = 0, dpr = 1, R0 = 0, CX = 0, CY = 0, cols = 0, rows = 0, v, rr, c;
-  const size = () => { dpr = Math.min(2, devicePixelRatio || 1); W = innerWidth; H = innerHeight; cv.width = W * dpr; cv.height = H * dpr;
+  const size = () => { dpr = Math.min(1.5, devicePixelRatio || 1);   // 1.5x is sharp enough for dots and much cheaper than 2x
+    W = innerWidth; H = innerHeight; cv.width = W * dpr; cv.height = H * dpr;
     cols = Math.ceil(W / S); rows = Math.ceil(H / S); v = new Float32Array(cols * rows); rr = new Float32Array(cols * rows); c = new Uint8Array(cols * rows);
     R0 = Math.max(70, Math.min(W * 0.3, H * 0.2)); CX = W / 2; CY = H / 2; mid.style.top = `${CY + R0 + 30}px`; };   // the planet sits in the middle of the screen
   size(); addEventListener('resize', size);
   const put = (i, val, r, col) => { if (val > v[i]) { v[i] = val; c[i] = col; } if (r > rr[i]) rr[i] = r; };
   const B = Array.from({ length: COL.length * (LV + 1) }, () => []);
+  // the faint background grid is the same every frame: draw it once to its own canvas and copy it in (it was ~50k arcs a frame)
+  let grid = null, gridKey = '';
+  const gridLayer = () => { const key = `${W}x${H}x${dpr}`; if (grid && gridKey === key) return grid; gridKey = key; grid = document.createElement('canvas'); grid.width = W * dpr; grid.height = H * dpr;
+    const q = grid.getContext('2d'); q.setTransform(dpr, 0, 0, dpr, 0, 0); q.fillStyle = BG; q.fillRect(0, 0, W, H); q.fillStyle = COL[0]; q.globalAlpha = 1 / LV; q.beginPath();
+    for (let y = 2.5; y < H; y += S) for (let x = 2.5; x < W; x += S) { q.moveTo(x + 1, y); q.arc(x, y, 1, 0, TAU); } q.fill(); return grid; };
   const draw = () => {   // dots.js render(): bucket by colour and level, one path per bucket
-    g.setTransform(dpr, 0, 0, dpr, 0, 0); g.fillStyle = BG; g.fillRect(0, 0, W, H);
+    g.setTransform(1, 0, 0, 1, 0, 0); g.drawImage(gridLayer(), 0, 0); g.setTransform(dpr, 0, 0, dpr, 0, 0);
     for (const b of B) b.length = 0;
-    for (let i = 0; i < v.length; i++) B[c[i] * (LV + 1) + Math.round(Math.min(1, v[i]) * LV)].push(i);
-    for (let k = 0; k < B.length; k++) { const b = B[k], lv = k % (LV + 1); if (!b.length || !lv) continue;
+    g.fillStyle = BG; for (let i = 0; i < v.length; i++) { if (v[i] < 0.02) g.fillRect((i % cols) * S, ((i / cols) | 0) * S, S, S);   // the black hole's void hides the grid too
+      B[c[i] * (LV + 1) + Math.round(Math.min(1, v[i]) * LV)].push(i); }
+    for (let k = 0; k < B.length; k++) { const b = B[k], lv = k % (LV + 1); if (!b.length || !lv || k === 1) continue;   // k 1 = the plain grid, already copied in
       g.fillStyle = COL[(k / (LV + 1)) | 0]; g.globalAlpha = lv / LV; g.beginPath();
       for (const i of b) { const x = (i % cols) * S + 2.5, y = ((i / cols) | 0) * S + 2.5, r = Math.min(2.2, rr[i]); g.moveTo(x + r, y); g.arc(x, y, r, 0, TAU); }
       g.fill(); }
@@ -352,7 +359,7 @@
     fill(scoreEl, [`space war · orange ${score[1]} – blue ${score[2]}`, `destroyed · ${destroyed}`, ...(tDark ? [`darkon’s beams · ${beamHits} hit${beamHits === 1 ? '' : 's'}`] : [])]); };
   const logEl = el.querySelector('.boot-log');
 
-  const t0 = performance.now(), behind = [...document.body.children].filter((e) => e !== el && !e.inert && e.tagName !== 'SCRIPT');
+  const t0 = performance.now(); let behind = [];
   let eR = 1, eCy = 0, tDark = 0, ringDone = false, beam = null, nBeam = 0, now_ = 0, phase = 'idle', tSpin = 0, tOut = 0, last = t0, spin = 0, w = 0.35, sky = 0, shownLog = -1, raf = 0, Rend = 0, said = '';
   const cover = () => Math.hypot(W / 2, H / 2) * 1.06;   // radius that hides every corner
   const start = () => { if (phase !== 'idle') return; phase = 'spin'; tSpin = performance.now(); el.classList.add('spin');
@@ -387,6 +394,7 @@
   };
   const ease = (u) => u * u * (3 - 2 * u), back = (u) => 1 + 2.7 * (u - 1) ** 3 + 1.7 * (u - 1) ** 2;
   const tick = (now) => {
+    try {   // a safety net: if a frame ever throws, the boot screen ends instead of trapping the visitor
     now_ = now; const ms = Math.max(0, now - t0), dt = Math.min(0.05, Math.max(0, now - last) / 1000); last = now;   // (rAF can stamp a frame a hair before t0)
     // spin speed: gentle while waiting, whips up after the click, slows to a stop as the page fades in
     const target = phase === 'idle' ? 0.35 : phase === 'spin' ? 9 : 0;
@@ -429,21 +437,24 @@
       say.classList.toggle('red', dk);
       if (txt && txt !== said) say.textContent = said = txt; say.classList.toggle('on', !!txt);
       say.style.setProperty('--s', Math.min(2.4, hgt / Math.max(70, R0 * 0.5)).toFixed(3));
-      say.style.translate = `${Math.min(head[0] + hgt * 0.3 + 12, W - say.offsetWidth * Math.min(2.4, hgt / Math.max(70, R0 * 0.5)) - 10).toFixed(1)}px ${(head[1] - hgt * 0.32 - 10).toFixed(1)}px`; say.style.marginTop = `-${say.offsetHeight}px`; }
+      say.style.translate = `${Math.min(head[0] + hgt * 0.3 + 12, W - say.offsetWidth * Math.min(2.4, hgt / Math.max(70, R0 * 0.5)) - 10).toFixed(1)}px ${Math.max(head[1] - hgt * 0.32 - 10, (W < 600 ? 84 : 8) + say.offsetHeight * Math.min(2.4, hgt / Math.max(70, R0 * 0.5))).toFixed(1)}px`; say.style.marginTop = `-${say.offsetHeight}px`; }
     // name + log (before the click)
     const nk = Math.max(0, Math.min(1, (ms - 900) / 1200)), fixed = Math.floor(nk * NAME.length);
     nameEl.textContent = [...NAME].map((ch, i) => (i < fixed || ch === ' ' ? ch : ms < 900 && i > 0 ? ' ' : GL[(Math.random() * GL.length) | 0])).join('');
     const li = Math.min(LOG.length - 1, Math.floor((ms - 250) / 420));   // a line every 0.42 s
     if (phase === 'idle' && li > shownLog && ms > 300) { shownLog = li; say_(`> ${LOG[li]}`); if (li === LOG.length - 1) liveEl = true; }   // the score appears once the log has typed
     live(ms);
+    } catch (err) { console.error(err); end(true); }
     raf = requestAnimationFrame(tick);
   };
 
-  behind.forEach((e) => (e.inert = true));   // the page can't be clicked or tabbed to
+  // the page behind can't be clicked, tabbed to or read until the boot ends. This script runs before <main> is parsed, so lock it once the DOM is in
+  const lockPage = () => { if (phase === 'out') return; behind = [...document.body.children].filter((e) => e !== el && !e.inert && !/^(SCRIPT|NOSCRIPT)$/.test(e.tagName)); behind.forEach((e) => (e.inert = true)); };
+  document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', lockPage) : lockPage();
   go.addEventListener('pointerdown', (e) => { if (e.isPrimary && e.button === 0) start(); });   // a pointer press on the person only: keys never reach it (not focusable)
   el.querySelector('.boot-skip').addEventListener('click', () => end(true));
   addEventListener('wheel', (e) => { if (phase !== 'out') e.preventDefault(); }, { passive: false });   // no scrolling under it (Lenis listens to the wheel)
   addEventListener('touchmove', (e) => { if (phase !== 'out') e.preventDefault(); }, { passive: false });
   raf = requestAnimationFrame(tick);
-  clearTimeout(window.__boot); el.style.animation = 'none';   // it runs: this script ends it, not the 7 s failsafes
+  clearTimeout(window.__boot); el.style.animation = 'none'; el.classList.add('ready');   // it runs: this script ends it, not the failsafes (and the hint can show)
 })();

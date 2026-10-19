@@ -331,14 +331,9 @@ section > :not(.full):not(.hero-band), .full > :not(.slab):not(.dots-box), .sys-
 .fb-c a[aria-current] { color: var(--ink); text-decoration: underline; text-decoration-color: var(--hot-text); text-decoration-thickness: 2px; text-underline-offset: 4px; }
 .fb-c a b { display: none; position: absolute; left: 0; transform: translateX(-140%); font-weight: 400; color: var(--hot-text); text-decoration: none; }
 .fb-c a[aria-current] b { display: none; }   /* desktop: the orange underline marks the current section; the dot shows in the phone sheet */
-.fb-stars { display: inline-flex; align-items: center; gap: .35em; min-height: 44px; min-width: 44px; padding: 0 .1rem; border: 0; background: none; color: var(--muted); font: inherit; text-transform: inherit; letter-spacing: inherit; cursor: pointer; }
-.fb-stars:hover { color: var(--ink); }
-.fb-stars[hidden] { display: none; }
-.fb-stars span { color: var(--hot-text); }
-.fb-stars::after { content: '\00a0//\00a0' / ''; color: var(--muted); opacity: .7; }
 .fb-menu, .fb-now { display: none; }
 .fbar :focus-visible { outline-offset: -2px; }
-@media (max-width: 1365px) {   /* Menu sheet below 1366px: with the Light/Dark switch, the full bar keeps ≥66px between its three groups from 1366px up */
+@media (max-width: 1399px) {   /* Menu sheet below 1366px: with the Light/Dark switch, the full bar keeps ≥66px between its three groups from 1366px up */
   .fbar { grid-template-columns: auto minmax(0, 1fr) auto; }
   .fb-menu { display: inline-flex; align-items: center; grid-column: 1; grid-row: 1; min-height: 36px; min-width: 64px; margin: 4px 0; justify-content: center; padding: 0 .8rem; border: 1.5px solid var(--ink); background: transparent; color: var(--ink); font: inherit; text-transform: inherit; cursor: pointer; }
   .fb-menu { min-height: 44px; margin: 0; }
@@ -365,7 +360,7 @@ section > :not(.full):not(.hero-band), .full > :not(.slab):not(.dots-box), .sys-
 .boot-screen { display: none; }
 html.boot { overflow: hidden; }
 html.boot .boot-screen, .boot-screen.fade { display: block; position: fixed; inset: 0; z-index: 10002; background: var(--deep); color: var(--on-deep); overflow: hidden;
-  animation: boot-safety 0s linear 6.5s forwards; }   /* boot.js turns this off once it runs */
+  animation: boot-safety 0s linear 3s forwards; }   /* boot.js turns this off once it runs */
 @keyframes boot-safety { to { visibility: hidden; } }   /* if boot.js never runs, the screen still goes */
 .boot-screen.fade { pointer-events: none; opacity: 0; transition: opacity var(--fade, 1.6s) cubic-bezier(.4, 0, .2, 1); }
 .boot-screen { touch-action: none; }   /* touch drags move the space objects, never the page */
@@ -446,7 +441,7 @@ html.rv .contact.in .bigname { clip-path: inset(-5% -5% -5% -5%); }
 @media (max-width: 700px) { html.rv .contact .mail { background: none; text-decoration: underline; text-decoration-color: var(--hot-text); text-decoration-thickness: .06em; text-underline-offset: .12em; } }   /* the email wraps on phones: keep the plain underline */
 
 /* no JS: hide controls that only work with it (the text itself is all there) */
-.no-js .dots-box, .no-js .scene, .no-js .play-strip .play-n, .no-js #system .side, .no-js .proj .btn[data-case], .no-js .fb-stars { display: none; }
+.no-js .dots-box, .no-js .scene, .no-js .play-strip .play-n, .no-js #system .side, .no-js .proj .btn[data-case] { display: none; }
 
 /* dark theme (bottom-bar toggle, saved in localStorage 'nyg-theme'; set before paint by the inline script in <head>).
    Same accents; text and rules flip; the Experience band and dot screens go a step darker than the page so they still read as bands. */
@@ -465,9 +460,9 @@ html.theme-anim, html.theme-anim body, html.theme-anim .fbar, html.theme-anim .r
 .fb-theme[aria-checked='true'] .tk::after { transform: translateX(12px); }
 .fb-theme:hover .tk { border-color: var(--ink); }
 .fb-theme::after { content: '\00a0//\00a0' / ''; color: var(--muted); opacity: .7; }
-@media (max-width: 480px) { .fbar .clock { display: none; } .fb-stars::after { content: none; } }   /* phones: the clock goes so the current-section name fits */
+@media (max-width: 480px) { .fbar .clock { display: none; } }   /* phones: the clock goes so the current-section name fits */
 .contact .mail { padding-block: .12em; min-height: 44px; }   /* 768px: the email link was 35px tall */
-@media (max-width: 480px) { .fb-stars { font-size: 0; gap: 0; } .fb-stars span { font-size: .85rem; } .fb-theme::after, .fb-stars::after { font-size: .75rem; }
+@media (max-width: 480px) { .fb-theme::after { font-size: .75rem; }
   .fb-theme { gap: .4em; } .fb-theme[aria-checked='true'] .tl { display: none; }
   .fb-theme[aria-checked='false'] .td { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; } }   /* phones: Stars is an icon (the word stays for screen readers); the switch shows only the current word */
 .fbar .clock:not(:empty)::after { content: none; }   /* the bar's clock is last in its group: no trailing dot */
@@ -482,10 +477,6 @@ html.theme-anim, html.theme-anim body, html.theme-anim .fbar, html.theme-anim .r
 
 /* sound (public/lab/sound.js): our own generated ambient music, off by default. Boot screen: "♪ sound off/on" under the clock.
    Bottom bar: "Sound" + three tiny bars that dance while it plays (still bars with reduced motion). */
-.boot-sound { position: absolute; top: 46px; right: 34px; min-height: 28px; padding: 0; border: 0; background: none; color: var(--on-deep-muted); font: inherit; letter-spacing: .06em; text-transform: uppercase; cursor: pointer;
-  opacity: 0; animation: boot-fade .7s ease .5s forwards; }
-.boot-sound[hidden] { display: none; } .boot-sound:hover, .boot-sound[aria-checked='true'] { color: var(--on-deep); } .boot-sound[aria-checked='true'] .sw { color: var(--hot); }
-.boot-sound:focus-visible { outline: 2px solid var(--on-deep); outline-offset: 3px; }
 .fb-sound { display: inline-flex; align-items: center; gap: .45em; min-height: 44px; min-width: 44px; padding: 0 .1rem; border: 0; background: none; color: var(--muted); font: inherit; text-transform: inherit; letter-spacing: inherit; cursor: pointer; }
 .fb-sound:hover, .fb-sound[aria-checked='true'] { color: var(--ink); } .fb-sound[hidden] { display: none; }
 .fb-sound::after { content: '\00a0//\00a0' / ''; color: var(--muted); opacity: .7; }
@@ -494,3 +485,24 @@ html.sound-on .eq i { animation: eq .9s ease-in-out infinite alternate; } html.s
 @keyframes eq { from { height: 3px; } to { height: 10px; } }
 @media (prefers-reduced-motion: reduce) { html.sound-on .eq i { animation: none; } html.sound-on .eq i:nth-child(1) { height: 5px; } html.sound-on .eq i:nth-child(2) { height: 10px; } html.sound-on .eq i:nth-child(3) { height: 7px; } }
 @media (max-width: 480px) { .fb-sound { font-size: 0; gap: 0; } .fb-sound::after { content: none; } }   /* phones: the clock is hidden, so no trailing //   /* phones: just the bars (the word stays for screen readers) */
+
+/* review fixes (UX / UI / QA agents, 2026-10-18) */
+.boot-screen:not(.ready) .boot-hint { visibility: hidden; }   /* no "click the person" unless boot.js is running (and drawing the person) */
+.boot-log, .boot-score, .boot-mid, .boot-tl, .boot-tr, .boot-sound { text-shadow: 0 0 2px var(--deep), 0 0 6px var(--deep); }   /* readable when a ship flies behind */
+@media (max-width: 600px) and (max-height: 700px), (max-height: 520px) { .boot-log > p:not(:last-of-type) { display: none; } }   /* short screens: only the last log line, clear of the name */
+.boot-sound { position: absolute; top: 38px; right: 34px; z-index: 1; display: inline-flex; align-items: center; gap: .45em; min-height: 44px; padding: 0; border: 0; background: none;
+  color: var(--on-deep-muted); font: 500 .75rem/1.2 var(--f-mono); letter-spacing: .06em; text-transform: uppercase; cursor: pointer; opacity: 0; animation: boot-fade .7s ease .5s forwards; }
+.boot-sound[hidden] { display: none; } .boot-sound:hover, .boot-sound[aria-checked='true'] { color: var(--on-deep); } .boot-sound .sw { margin-left: .1em; } .boot-sound[aria-checked='true'] .sw { color: var(--hot); }
+.boot-sound:focus-visible { outline: 2px solid var(--on-deep); outline-offset: 3px; }
+@media (max-width: 600px) { .boot-sound { right: 26px; } }
+.fbar .eq i, .boot-sound .eq i { margin: 0; opacity: 1; }   /* the bar's "i" separator style was spacing the bars out into "…" */
+.eq i { background: var(--muted); } .eq i:nth-child(1) { height: 4px; } .eq i:nth-child(2) { height: 8px; } .eq i:nth-child(3) { height: 6px; }   /* off: still, grey, uneven (reads as bars) */
+.boot-sound .eq i { background: var(--on-deep-muted); }
+html.sound-on .eq i { background: var(--hot-text); } html.sound-on .boot-sound .eq i { background: var(--hot); }
+:root { --villain: #e4242c; --villain-text: #ff7478; }   /* Darkon only, never on the main site */
+.boot-say.red, .boot-screen.spin .boot-say.red { border-color: var(--villain); color: var(--villain-text); }
+.fbar a::before { content: ''; position: absolute; inset: 0 -7px; }   /* bigger tap area for short links, same spacing */
+@media (max-width: 360px) { .fb-theme .tw { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); } .fb-theme::after { content: none; } }   /* tiny phones: the switch alone, so the section name fits */
+html[data-theme='dark'] .btn.hot:focus-visible { outline-color: var(--deep); }
+.hero-text .acts .more { display: inline-flex; align-items: center; min-height: 44px; padding: 0 .5rem; color: var(--ink); font-weight: 600; text-decoration: underline; text-decoration-color: var(--hot-text); text-decoration-thickness: 2px; text-underline-offset: 5px; }
+.hero-text .acts .more:hover { color: var(--hot-text); } .hero-text .acts .more:last-child { grid-column: 1 / -1; justify-content: center; }   /* phones: its own centred row */

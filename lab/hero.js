@@ -47,13 +47,14 @@ window.mountHero = (band, mode) => {
   // plays forever (Noel, 2026-10-18) while the band is on screen; the bottom bar's "Stars" toggle pauses it too (window.MOTION,
   // WCAG 2.2.2). Speed eases toward its target (.5 s), so pausing or scrolling away settles instead of freezing. Reduced motion: one still frame.
   let visible = true, raf = 0, tt = still ? 3 : 0, last = performance.now(), v = 0;
-  const target = () => (visible && !document.hidden && !(window.MOTION && window.MOTION.paused) ? 1 : 0);
+  const target = () => (visible && !document.hidden && !document.documentElement.classList.contains('boot') && !(window.MOTION && window.MOTION.paused) ? 1 : 0);   // (paused under the boot screen)
   const loop = (now) => { raf = 0; const dt = Math.min(.1, (now - last) / 1000), tg = target(); last = now;
     v += (tg - v) * Math.min(1, dt * 3.5); if (!tg && v < .03) v = 0; tt += dt * v; draw[mode](tt);
     if (tg || v > 0) raf = requestAnimationFrame(loop); };
   const wake = () => { if (still || raf || !target()) return; last = performance.now(); raf = requestAnimationFrame(loop); };
   new IntersectionObserver(([e]) => { visible = e.isIntersecting; wake(); }).observe(band);
   document.addEventListener('visibilitychange', wake);
+  new MutationObserver(wake).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });   // starts when the boot screen lifts
   addEventListener('motionchange', wake);
   if (still) draw[mode](tt); else raf = requestAnimationFrame(loop);
 };
