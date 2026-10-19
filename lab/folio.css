@@ -210,7 +210,7 @@ html.kcursor-on input, html.kcursor-on textarea { cursor: text !important; }
   .hero-text .who { order: -2; font-size: 1.2rem; line-height: 1.25; margin-bottom: .7rem; }
   .hero-text .who span { display: block; font-size: 1rem; margin-top: .15rem; }
   .hero-text .who .sep { display: none; }                           /* no leading "·" when the role starts its own line */
-  .hero-text .acts { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; } .hero-text .acts .btn { justify-content: center; } .hero-text .acts .btn.hot { grid-column: 1 / -1; }
+  .hero-text .acts { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; } .hero-text .acts .btn { justify-content: center; } .hero-text .acts .btn.hot { grid-column: 1 / -1; } .hero-text .acts .btn:nth-child(4):last-child { grid-column: 1 / -1; }   /* the Blog button: full width under Résumé + Email */
   .proj dl { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .6rem; }
   .sys-legend { display: grid; justify-content: start; gap: .55rem; text-align: left; padding: 0 .2rem; }
   .cbar.inline ul { flex-wrap: wrap; border-radius: 16px; }
@@ -325,8 +325,8 @@ section > :not(.full):not(.hero-band), .full > :not(.slab):not(.dots-box), .sys-
 .fb-r { grid-column: 3; grid-row: 1; justify-self: end; white-space: nowrap; display: flex; align-items: center; }   /* flex: the switch, Stars and clock share one centre line on phones too */
 .fbar.mono { font-size: .69rem; }   /* a touch smaller than other mono labels: the bar holds 3 groups */
 .fbar i { font-style: normal; color: var(--muted); margin: 0 .25rem; opacity: .7; }
-.fb-c i { margin: 0 .4rem; }   /* tight inside each group, so the space sits between the three groups */
-.fbar a { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; min-width: 44px; padding: 0 .1rem; color: var(--muted); text-decoration: none; white-space: nowrap; position: relative; }
+.fb-c i { margin: 0 .4rem; }   /* links have no min-width, so every // sits the same distance from its words (short ones like Index/Blog used to get 44px of padding) */   /* tight inside each group, so the space sits between the three groups */
+.fbar a { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; min-width: 0; padding: 0 .15rem; color: var(--muted); text-decoration: none; white-space: nowrap; position: relative; }
 .fbar a:hover { color: var(--ink); text-decoration: underline; text-decoration-color: var(--hot); text-decoration-thickness: 2px; text-underline-offset: 4px; }
 .fb-c a[aria-current] { color: var(--ink); text-decoration: underline; text-decoration-color: var(--hot-text); text-decoration-thickness: 2px; text-underline-offset: 4px; }
 .fb-c a b { display: none; position: absolute; left: 0; transform: translateX(-140%); font-weight: 400; color: var(--hot-text); text-decoration: none; }
@@ -359,19 +359,25 @@ section > :not(.full):not(.hero-band), .full > :not(.slab):not(.dots-box), .sys-
   .scene .dots-box canvas { aspect-ratio: 4 / 3; }
 }
 
-/* boot screen (public/lab/boot.js): fixed over everything, so the page underneath never shifts. Hidden unless html.boot. */
+/* boot screen (public/lab/boot.js): fixed over everything, so the page underneath never shifts. Hidden unless html.boot.
+   A dot-matrix planet with a person on top says "Choose Me"; click it and the world spins ("WOOOO"), grows past the edges,
+   slows to a stop and the whole screen fades into the site. */
 .boot-screen { display: none; }
 html.boot { overflow: hidden; }
-html.boot .boot-screen, .boot-screen.lift { display: block; position: fixed; inset: 0; z-index: 10002; background: var(--deep); color: var(--on-deep); overflow: hidden;
-  animation: boot-safety 0s linear 6.5s forwards; }
+html.boot .boot-screen, .boot-screen.fade { display: block; position: fixed; inset: 0; z-index: 10002; background: var(--deep); color: var(--on-deep); overflow: hidden;
+  animation: boot-safety 0s linear 6.5s forwards; }   /* boot.js turns this off once it runs */
 @keyframes boot-safety { to { visibility: hidden; } }   /* if boot.js never runs, the screen still goes */
-/* exit: a box opens from the centre and grows past the edges, the site shows through it, and the screen fades as it goes */
-.boot-screen.lift { pointer-events: none;
-  -webkit-mask: linear-gradient(#000 0 0) center / 0 0 no-repeat, linear-gradient(#000 0 0) 0 0 / 100% 100%; -webkit-mask-composite: xor; -webkit-mask-size: 0 0, 100% 100%;
-  mask: linear-gradient(#000 0 0) center / 0 0 no-repeat exclude, linear-gradient(#000 0 0) 0 0 / 100% 100%;
-  animation: boot-open 1.25s cubic-bezier(.65, 0, .25, 1) forwards; }
-@keyframes boot-open { from { -webkit-mask-size: 6vw 6vh, 100% 100%; mask-size: 6vw 6vh, 100% 100%; } 55% { opacity: 1; }
-  to { -webkit-mask-size: 104vw 104vh, 100% 100%; mask-size: 104vw 104vh, 100% 100%; opacity: 0; } }
+.boot-screen.fade { pointer-events: none; opacity: 0; transition: opacity var(--fade, 1.6s) cubic-bezier(.4, 0, .2, 1); }
+.boot-screen { touch-action: none; }   /* touch drags move the space objects, never the page */
+.boot-world { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }   /* the canvas is drawn at up to 2x; this keeps it screen-sized on Retina */
+.boot-go { position: absolute; left: 0; top: 0; cursor: pointer; touch-action: none; }   /* sits over the person only (boot.js) */
+@media (hover: hover) and (pointer: fine) { .boot-screen, .boot-go { cursor: none; } }   /* boot.js draws its own pointer (reticle + trail); Skip keeps the normal hand */
+.boot-screen.spin .boot-go { pointer-events: none; cursor: default; }
+.boot-say { position: absolute; left: 0; top: 0; margin: 0; padding: .45em .8em; border: 1.5px solid var(--on-deep); border-radius: 14px 14px 14px 3px; background: var(--deep); color: var(--on-deep);
+  font-size: .85rem; letter-spacing: .08em; white-space: nowrap; pointer-events: none; transform-origin: 0 100%; opacity: 0; scale: .4; transition: opacity .25s ease, scale .35s cubic-bezier(.3, 1.6, .5, 1); }
+.boot-say.on { opacity: 1; scale: var(--s, 1); }
+.boot-screen.spin .boot-say { border-color: var(--hot); color: var(--hot); font-weight: 600; transition: opacity .25s ease; }
+.boot-say.red, .boot-screen.spin .boot-say.red { border-color: #e4242c; color: #ff5d62; font-weight: 600; }   /* Darkon */
 .boot-screen::before, .boot-screen::after { content: ''; position: absolute; inset: 14px; pointer-events: none;   /* corner brackets */
   background: linear-gradient(var(--on-deep-muted), var(--on-deep-muted)) top left / 18px 1px, linear-gradient(var(--on-deep-muted), var(--on-deep-muted)) top left / 1px 18px,
     linear-gradient(var(--on-deep-muted), var(--on-deep-muted)) top right / 18px 1px, linear-gradient(var(--on-deep-muted), var(--on-deep-muted)) top right / 1px 18px,
@@ -380,37 +386,24 @@ html.boot .boot-screen, .boot-screen.lift { display: block; position: fixed; ins
   background-repeat: no-repeat; opacity: 0; animation: boot-fade .7s ease .3s forwards; }
 .boot-screen::after { display: none; }
 @keyframes boot-fade { to { opacity: 1; } }
-@keyframes boot-hide { from { opacity: 1; } to { opacity: 0; } }
 .boot-tl, .boot-tr { position: absolute; top: 26px; margin: 0; color: var(--on-deep-muted); letter-spacing: .06em; opacity: 0; animation: boot-fade .7s ease .4s forwards; }
-.boot-tl { left: 34px; } .boot-tl i { font-style: normal; opacity: .6; } .boot-tr { right: 34px; }
-.boot-mid { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 1.1rem; }
-.boot-cat svg { display: block; width: min(52vw, 230px); height: auto; overflow: visible; }
-.boot-cat circle { fill: var(--c); opacity: 0; transform-box: fill-box; transform-origin: center; animation: boot-fly 1.15s cubic-bezier(.2, .8, .2, 1) var(--d) forwards; }
-.boot-cat circle.hot { animation-name: boot-fly-hot; } .boot-cat circle.dim { animation-name: boot-fly-dim; }
-@keyframes boot-fly { from { opacity: 0; transform: translate(var(--sx), var(--sy)) scale(.5); fill: var(--c); } 25% { opacity: 1; } 70% { fill: var(--c); } to { opacity: 1; transform: none; fill: var(--on-deep); } }
-@keyframes boot-fly-hot { from { opacity: 0; transform: translate(var(--sx), var(--sy)) scale(.5); } 25% { opacity: 1; } to { opacity: 1; transform: none; fill: var(--hot); } }
-@keyframes boot-fly-dim { from { opacity: 0; transform: translate(var(--sx), var(--sy)) scale(.5); } 25% { opacity: 1; } to { opacity: 1; transform: none; fill: var(--on-deep-muted); } }
-.boot-cat .earL, .boot-cat .earR { transform-box: fill-box; transform-origin: 50% 100%; }
-.boot-cat .earL { animation: boot-twitch .4s ease-in-out 2.1s 1; }
-@keyframes boot-twitch { 35% { transform: rotate(-14deg); } 70% { transform: rotate(6deg); } }
-.boot-cat .eyes { transform-box: fill-box; transform-origin: center; animation: boot-blink .26s ease-in-out 2.6s 1; }
-@keyframes boot-blink { 50% { transform: scaleY(.12); } }
-.boot-screen.out :is(.boot-name, .boot-prog, .boot-log, .boot-skip, .boot-tl, .boot-tr) { animation: boot-hide .3s ease forwards; }   /* the text goes first, so the opening box never cuts through it */
-.boot-screen.out .boot-cat circle { animation: boot-burst .8s cubic-bezier(.5, 0, .9, .5) forwards; }
-@keyframes boot-burst { from { opacity: 1; transform: none; } to { opacity: 0; transform: translate(var(--ex), var(--ey)) scale(.4); } }
+.boot-tl { left: 34px; } .boot-tl i { font-style: normal; opacity: .6; } .boot-tr { right: 34px; } .boot-tl, .boot-tr { z-index: 1; }   /* above the canvas, which paints its own background */
 .boot-name { margin: .4rem 0 0; font-size: clamp(.8rem, 1.6vw, 1rem); letter-spacing: .14em; color: var(--on-deep); white-space: pre; }
-.boot-prog { display: flex; align-items: center; gap: .9rem; margin: 0; color: var(--on-deep-muted); }
-.boot-bar { display: flex; gap: 4px; } .boot-bar i { width: 4px; height: 4px; border-radius: 50%; background: rgba(239,232,220,.18); transition: background .15s; }
-.boot-bar i.on { background: var(--on-deep); } .boot-bar i.on:last-child { background: var(--hot); }
-.boot-n { color: var(--on-deep); font-variant-numeric: tabular-nums; }
 .boot-log { position: absolute; left: 34px; bottom: 30px; max-width: calc(100% - 200px); color: var(--on-deep-muted); }
 .boot-log p { margin: .25rem 0 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; animation: boot-type .35s steps(24) both; }
-.boot-log p:last-child { color: var(--on-deep); } .boot-log p:last-child::after { content: '_'; animation: boot-caret .5s steps(1) infinite; }
+.boot-log > p:last-of-type { color: var(--on-deep); } .boot-log > p:last-of-type::after { content: '_'; animation: boot-caret .5s steps(1) infinite; }
+.boot-screen { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }   /* nothing on the boot screen gets selected by accident (drags, double clicks, long presses) */
+.boot-score { position: absolute; right: 34px; bottom: 30px; text-align: right; color: var(--on-deep-muted); font-variant-numeric: tabular-nums; transition: opacity .35s ease; }   /* the game score, bottom right (where Skip was) */
+.boot-score p { margin: .25rem 0 0; white-space: nowrap; } .boot-score p:first-child { color: var(--on-deep); }
 @keyframes boot-type { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
 @keyframes boot-caret { 50% { opacity: 0; } }
-.boot-skip { position: absolute; right: 22px; bottom: 22px; min-height: 44px; min-width: 44px; padding: 0 1rem; border: 1px solid rgba(239,232,220,.4); background: none; color: var(--on-deep); cursor: pointer; }
+.boot-skip { position: absolute; left: 50%; top: 22px; translate: -50% 0; min-height: 44px; min-width: 44px; padding: 0 1rem; border: 1px solid rgba(239,232,220,.4); background: var(--deep); color: var(--on-deep); cursor: pointer; }
+.boot-skip:not(:focus-visible) { clip-path: inset(50%); width: 1px; height: 1px; min-width: 0; min-height: 0; padding: 0; overflow: hidden; border: 0; }   /* Noel: no visible Skip. It shows only when someone tabs to it: keyboard and screen-reader users can't click the person */
 .boot-skip:hover { border-color: var(--on-deep); } .boot-skip:focus-visible { outline: 2px solid var(--on-deep); outline-offset: 2px; }
-@media (max-width: 600px) { .boot-log { left: 22px; bottom: 82px; max-width: calc(100% - 44px); } .boot-tl { left: 26px; } .boot-tr { right: 26px; } }
+.boot-mid { position: absolute; left: 0; right: 0; top: 70%; display: grid; justify-items: center; gap: .55rem; text-align: center; transition: opacity .35s ease; }
+.boot-hint { margin: 0; color: var(--on-deep-muted); letter-spacing: .08em; opacity: 0; animation: boot-fade .6s ease 2.2s forwards; }
+.boot-screen.spin :is(.boot-mid, .boot-log, .boot-score, .boot-tl, .boot-tr, .boot-sound) { opacity: 0 !important; transition: opacity .35s ease; animation: none; }   /* the words go first, so it's just the planet */
+@media (max-width: 600px) { .boot-score { right: 22px; bottom: 22px; font-size: .62rem; } .boot-score p { margin-top: .12rem; } .boot-log { left: 22px; bottom: 82px; max-width: calc(100% - 44px); font-size: .62rem; } .boot-log p { margin-top: .12rem; } .boot-tl { left: 26px; } .boot-tr, .boot-sound { right: 26px; } }
 
 /* section entrances (public/lab/reveal.js). Hidden states only under html.rv (JS on, no reduced motion); --i = stagger index */
 html.rv main > section { --ease: cubic-bezier(.2, .7, .2, 1); }
@@ -486,3 +479,18 @@ html.theme-anim, html.theme-anim body, html.theme-anim .fbar, html.theme-anim .r
 ::view-transition-new(root) { animation: pt-in .8s cubic-bezier(.65, 0, .25, 1) both; }
 @keyframes pt-out { to { opacity: .3; transform: scale(.96); } }
 @keyframes pt-in { from { clip-path: inset(44% 44% round 8px); } to { clip-path: inset(0 round 0); } }
+
+/* sound (public/lab/sound.js): our own generated ambient music, off by default. Boot screen: "♪ sound off/on" under the clock.
+   Bottom bar: "Sound" + three tiny bars that dance while it plays (still bars with reduced motion). */
+.boot-sound { position: absolute; top: 46px; right: 34px; min-height: 28px; padding: 0; border: 0; background: none; color: var(--on-deep-muted); font: inherit; letter-spacing: .06em; text-transform: uppercase; cursor: pointer;
+  opacity: 0; animation: boot-fade .7s ease .5s forwards; }
+.boot-sound[hidden] { display: none; } .boot-sound:hover, .boot-sound[aria-checked='true'] { color: var(--on-deep); } .boot-sound[aria-checked='true'] .sw { color: var(--hot); }
+.boot-sound:focus-visible { outline: 2px solid var(--on-deep); outline-offset: 3px; }
+.fb-sound { display: inline-flex; align-items: center; gap: .45em; min-height: 44px; min-width: 44px; padding: 0 .1rem; border: 0; background: none; color: var(--muted); font: inherit; text-transform: inherit; letter-spacing: inherit; cursor: pointer; }
+.fb-sound:hover, .fb-sound[aria-checked='true'] { color: var(--ink); } .fb-sound[hidden] { display: none; }
+.fb-sound::after { content: '\00a0//\00a0' / ''; color: var(--muted); opacity: .7; }
+.eq { display: inline-flex; align-items: flex-end; gap: 2px; height: 10px; } .eq i { width: 2px; height: 3px; background: var(--hot-text); }
+html.sound-on .eq i { animation: eq .9s ease-in-out infinite alternate; } html.sound-on .eq i:nth-child(2) { animation-delay: -.3s; } html.sound-on .eq i:nth-child(3) { animation-delay: -.6s; }
+@keyframes eq { from { height: 3px; } to { height: 10px; } }
+@media (prefers-reduced-motion: reduce) { html.sound-on .eq i { animation: none; } html.sound-on .eq i:nth-child(1) { height: 5px; } html.sound-on .eq i:nth-child(2) { height: 10px; } html.sound-on .eq i:nth-child(3) { height: 7px; } }
+@media (max-width: 480px) { .fb-sound { font-size: 0; gap: 0; } .fb-sound::after { content: none; } }   /* phones: the clock is hidden, so no trailing //   /* phones: just the bars (the word stays for screen readers) */

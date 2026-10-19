@@ -19,9 +19,9 @@
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
-<header class="bar"><a class="logo" href="/" aria-label="Noel Yohannes Ghebremeskel, home">Noel Y.G.</a><nav aria-label="Site"><a href="/">Home</a><a href="/blog/" aria-current="false">Writing</a><a href="/resume.pdf" download="Noel_Yohannes_Ghebremeskel_Resume.pdf">Résumé</a></nav></header>
+<header class="bar"><a class="logo" href="/" aria-label="Noel Yohannes Ghebremeskel, home">Noel Y.G.</a><nav aria-label="Site"><a href="/">Home</a><a href="/blog/" aria-current="false">Blog</a><a href="/resume.pdf" download="Noel_Yohannes_Ghebremeskel_Resume.pdf">Résumé</a></nav></header>
 <main id="main">
-<article><header class="head"><p class="mono"><a href="/blog/">← Writing</a> · <time datetime="2026-10-17">October 17, 2026</time> · 4 min read</p><h1>Why my AI agent isn&#39;t allowed to check its own work</h1><p class="lead">In Casefile, an AI writes anti-money-laundering case notes, but plain code checks every number against the ledger before anyone sees them. Here is how it works, and the bug that got past it first.</p></header>
+<article><header class="head"><p class="mono"><a href="/blog/">← Blog</a> · <time datetime="2026-10-17">October 17, 2026</time> · 4 min read</p><h1>Why my AI agent isn&#39;t allowed to check its own work</h1><p class="lead">In Casefile, an AI writes anti-money-laundering case notes, but plain code checks every number against the ledger before anyone sees them. Here is how it works, and the bug that got past it first.</p></header>
 <div class="prose"><p>An investigation note with one wrong amount in it is worse than no note at all. An analyst who trusts it can escalate the wrong case. An analyst who catches it stops trusting the tool.</p>
 <p>A language model will happily write &quot;$12,400 moved through 14 accounts&quot; whether or not that&#39;s true. So when I built <strong>Casefile</strong>, an assistant that drafts the first pass of an anti-money-laundering (AML) investigation, I set one rule: <strong>the AI writes, but it never gets the last word on a fact.</strong></p>
 <h2 id="splitting-the-job">Splitting the job</h2>

@@ -24,12 +24,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;900&family=Geist+Mono:wght@400;500&family=Fragment+Mono&family=Inter:wght@400;500;600&family=Inter+Tight:wght@800;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/lab/case-ui.css" ><link rel="stylesheet" href="/lab/folio.css" >
 <script>/* theme before first paint: dark by default (set on <html>); saved choice ('nyg-theme2') or ?theme=dark|light for testing */try{var t=(location.search.match(/[?&]theme=(dark|light)/)||[])[1]||localStorage.getItem('nyg-theme2');if(t==='light'){delete document.documentElement.dataset.theme;document.querySelector('meta[name=theme-color]').setAttribute('content','#efe8dc')}}catch(e){}</script>
-<script>/* boot screen on every load except deep links (#contact etc.), never with reduced motion (see /lab/boot.js); ?boot=0 skips it */var d=document.documentElement;d.classList.remove('no-js');try{if(!/[?&]boot=0/.test(location.search)&&!location.hash&&!matchMedia('(prefers-reduced-motion: reduce)').matches){d.classList.add('boot');setTimeout(function(){d.classList.remove('boot')},7000)}}catch(e){}</script>
+<script>/* boot screen on every load (boot.js cancels this 7 s failsafe once it runs) except deep links (#contact etc.), never with reduced motion (see /lab/boot.js); ?boot=0 skips it */var d=document.documentElement;d.classList.remove('no-js');/* every load starts at the top (or at the #link), not where the last visit stopped: the browser jumping there after the boot screen threw the star pathway around */try{history.scrollRestoration='manual'}catch(e){}if(!location.hash)scrollTo(0,0);try{if(!/[?&]boot=0/.test(location.search)&&!location.hash&&!matchMedia('(prefers-reduced-motion: reduce)').matches){d.classList.add('boot');window.__boot=setTimeout(function(){d.classList.remove('boot')},7000)}}catch(e){}</script>
 </head>
 <body>
 <div class="boot-screen"><p class="boot-tl mono">NYG <i>//</i> portfolio</p><p class="boot-tr mono boot-clock">Toronto</p>
-  <div class="boot-mid"><div class="boot-cat"></div><p class="boot-name mono" aria-hidden="true" data-name="Noel Yohannes Ghebremeskel">Noel Yohannes Ghebremeskel</p><p class="boot-prog mono"><span class="boot-bar" aria-hidden="true"></span><span class="boot-n" aria-hidden="true">000</span></p></div>
-  <div class="boot-log mono" aria-hidden="true"></div><button type="button" class="boot-skip mono">Skip intro</button></div>
+  <canvas class="boot-world" aria-hidden="true"></canvas><div class="boot-go" aria-hidden="true"></div><p class="boot-say mono" aria-hidden="true">Choose Me</p>
+  <div class="boot-mid"><p class="boot-name mono" aria-hidden="true" data-name="Noel Yohannes Ghebremeskel">Noel Yohannes Ghebremeskel</p><p class="boot-hint mono" aria-hidden="true">[ <span class="click">click</span><span class="tap">tap</span> the person ]</p></div>
+  <button type="button" class="boot-skip mono">Skip intro</button><button type="button" class="boot-sound mono" role="switch" aria-checked="false" hidden>♪ sound <span class="sw">off</span></button><div class="boot-log mono" aria-hidden="true"></div><div class="boot-score mono" aria-hidden="true"></div></div>
 <script src="/lab/boot.js" ></script>
 <a class="skip" href="#top">Skip to content</a>
 <!-- Home page (Noel chose Version A "Orbit", 2026-10-17). The empty comment slots below are filled from public/lab/content.js at build time. -->
@@ -44,7 +45,7 @@
       <p class="tag mono ticker" data-facts="Open to Winter + Summer 2027|2+ years shipping code at MPAC|88 automated tests across 2 projects">[ Open to Winter + Summer 2027 ]</p>
       <dl id="glance"><dt class="mono">Status</dt><dd>Student, York University (Lassonde School of Engineering)</dd><dt class="mono">Looking for</dt><dd>Winter + Summer 2027 internships or co-ops</dd><dt class="mono">Location</dt><dd>Toronto, Eastern Time</dd><dt class="mono">Eligibility</dt><dd>Canadian citizen</dd><dt class="mono">Experience</dt><dd>2+ years at MPAC (co-op + contract)</dd></dl>
       <p class="intro">Two years shipping production code at MPAC, now studying Digital Media at York University’s Lassonde School of Engineering. I build tools where the important numbers are checked by code, not taken on faith.</p>
-      <div class="acts"><a class="btn hot" href="#projects">See the projects ↓</a><a class="btn" href="/resume.pdf" download="Noel_Yohannes_Ghebremeskel_Resume.pdf">Résumé (PDF)</a><a class="btn" data-mail href="mailto:yohannesghebremesk@gmail.com">Email me</a></div>
+      <div class="acts"><a class="btn hot" href="#projects">See the projects ↓</a><a class="btn" href="/resume.pdf" download="Noel_Yohannes_Ghebremeskel_Resume.pdf">Résumé (PDF)</a><a class="btn" data-mail href="mailto:yohannesghebremesk@gmail.com">Email me</a><a class="btn" href="/blog/">Read the blog →</a></div>
     </div>
   </section>
 
@@ -110,7 +111,7 @@
   <section class="row contact" id="contact">
     <h2 class="tight">Hiring for Winter or Summer 2027?</h2><p class="side mono">[ canadian citizen · eastern time ]</p>
     <a class="mail tight" data-mail="text" href="mailto:yohannesghebremesk@gmail.com">yohannesghebremesk@<wbr>gmail.com</a>
-    <div class="links"><a href="/resume.pdf" download="Noel_Yohannes_Ghebremeskel_Resume.pdf">Résumé (PDF)</a><a href="https://linkedin.com/in/noel-yohannes">LinkedIn</a><a href="https://github.com/nyohen">GitHub</a><a href="/blog/">Writing</a></div>
+    <div class="links"><a href="/resume.pdf" download="Noel_Yohannes_Ghebremeskel_Resume.pdf">Résumé (PDF)</a><a href="https://linkedin.com/in/noel-yohannes">LinkedIn</a><a href="https://github.com/nyohen">GitHub</a><a href="/blog/">Blog</a></div>
     <p class="bigname tight" aria-hidden="true">Noel Yohannes<br>Ghebremeskel</p>
     <div class="scene full"><p class="dots-cap mono"><span class="ping" aria-hidden="true"></span><span class="scene-now">Toronto</span><span class="n" aria-live="polite"></span><button type="button" class="dots-pause" aria-pressed="false" aria-label="Pause sunset" data-what="sunset"><span aria-hidden="true">❚❚</span></button></p>
       <div class="dots-box"><canvas data-dots="sunset" tabindex="0" role="button" aria-label="The sky over the water in Toronto right now: the sun or moon where it really is. Dolphins, a shark, fish and a whale pass by. Click or press Enter on the water to make a fish or dolphin jump; click the sky by day to send a bird off."></canvas></div></div>
@@ -135,13 +136,13 @@
     </nav>
   </div>
   <p class="fb-now" aria-hidden="true"></p>
-  <p class="fb-r"><button type="button" class="fb-theme" role="switch" aria-checked="true" hidden><span class="tw tl" aria-hidden="true">Light</span><span class="tk" aria-hidden="true"></span><span class="tw td">Dark</span></button><button type="button" class="fb-stars" aria-pressed="false" hidden>Stars <span aria-hidden="true">❚❚</span></button><span class="clock"></span></p>
+  <p class="fb-r"><button type="button" class="fb-theme" role="switch" aria-checked="true" hidden><span class="tw tl" aria-hidden="true">Light</span><span class="tk" aria-hidden="true"></span><span class="tw td">Dark</span></button><button type="button" class="fb-sound" role="switch" aria-checked="false" hidden>Sound <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span></button><span class="clock"></span></p>
 </div>
 <noscript><p style="background:#ecebe6;padding:1rem;margin:0">The pipeline diagram and case-study panels need JavaScript; everything else on this page is plain text.</p></noscript>
 
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.27/dist/lenis.min.js" defer ></script>
 <script src="/lab/content.js" ></script><script src="/lab/scenes.js" ></script><script src="/lab/case-ui.js" ></script><script src="/lab/hero.js" ></script><script src="/lab/folio.js" ></script><script src="/lab/burst.js" defer ></script><script src="/lab/cursor.js" defer ></script><script src="/lab/system-diagram.js" ></script>
 <script src="/lab/home.js" ></script>
-<script src="/lab/stars.js" ></script><script src="/lab/dots.js" ></script><script src="/lab/unlock.js" ></script><script src="/lab/reveal.js" ></script><script src="/lab/nav.js" defer ></script>
+<script src="/lab/stars.js" ></script><script src="/lab/sound.js" ></script><script src="/lab/dots.js" ></script><script src="/lab/unlock.js" ></script><script src="/lab/reveal.js" ></script><script src="/lab/nav.js" defer ></script>
 </body>
 </html>

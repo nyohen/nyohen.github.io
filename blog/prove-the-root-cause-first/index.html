@@ -19,9 +19,9 @@
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
-<header class="bar"><a class="logo" href="/" aria-label="Noel Yohannes Ghebremeskel, home">Noel Y.G.</a><nav aria-label="Site"><a href="/">Home</a><a href="/blog/" aria-current="false">Writing</a><a href="/resume.pdf" download="Noel_Yohannes_Ghebremeskel_Resume.pdf">Résumé</a></nav></header>
+<header class="bar"><a class="logo" href="/" aria-label="Noel Yohannes Ghebremeskel, home">Noel Y.G.</a><nav aria-label="Site"><a href="/">Home</a><a href="/blog/" aria-current="false">Blog</a><a href="/resume.pdf" download="Noel_Yohannes_Ghebremeskel_Resume.pdf">Résumé</a></nav></header>
 <main id="main">
-<article><header class="head"><p class="mono"><a href="/blog/">← Writing</a> · <time datetime="2026-10-17">October 17, 2026</time> · 4 min read</p><h1>Proving a root cause before reporting it</h1><p class="lead">RootCause is an on-call agent that finds why a microservice broke, then re-queries the telemetry to prove it before it says anything. Why the loudest service is usually the wrong answer, and why &quot;I don&#39;t know&quot; is a feature.</p></header>
+<article><header class="head"><p class="mono"><a href="/blog/">← Blog</a> · <time datetime="2026-10-17">October 17, 2026</time> · 4 min read</p><h1>Proving a root cause before reporting it</h1><p class="lead">RootCause is an on-call agent that finds why a microservice broke, then re-queries the telemetry to prove it before it says anything. Why the loudest service is usually the wrong answer, and why &quot;I don&#39;t know&quot; is a feature.</p></header>
 <div class="prose"><p>When something breaks in a system of microservices, the first stretch of an incident is spent jumping between dashboards, trying to work out which service actually failed. And the loudest symptom is usually not the cause. When the payment service breaks, checkout and the front end light up too, because they&#39;re waiting on it.</p>
 <p>A confident wrong diagnosis is expensive. It sends people to fix the wrong thing while the outage keeps going. So when I built <strong>RootCause</strong>, an on-call assistant, I wanted its answers to be checkable, not just plausible.</p>
 <h2 id="an-answer-key">An answer key</h2>
