@@ -9,9 +9,7 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="theme-color" content="#16151a">
 <meta name="color-scheme" content="dark light">
-<meta name="darkreader-lock"><!-- Dark Reader leaves the designed colours alone (it was hiding text) -->
-<!-- Share previews (site at https://noelyohannes.com/ from 2026-10-18; first published at nyohen.github.io on 2026-10-17). -->
-<link rel="canonical" href="https://noelyohannes.com/">
+<meta name="darkreader-lock"><link rel="canonical" href="https://noelyohannes.com/">
 <meta property="og:url" content="https://noelyohannes.com/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Noel Yohannes Ghebremeskel — Developer">
@@ -21,19 +19,17 @@
 <meta property="og:image:alt" content="Noel Yohannes Ghebremeskel. Full-stack developer, Toronto, open to Winter and Summer 2027.">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;900&family=Geist+Mono:wght@400;500&family=Fragment+Mono&family=Inter:wght@400;500;600&family=Inter+Tight:wght@800;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/lab/case-ui.css" ><link rel="stylesheet" href="/lab/folio.css" >
-<script>/* theme before first paint: dark by default (set on <html>); saved choice ('nyg-theme2') or ?theme=dark|light for testing */try{var t=(location.search.match(/[?&]theme=(dark|light)/)||[])[1]||localStorage.getItem('nyg-theme2');if(t==='light'){delete document.documentElement.dataset.theme;document.querySelector('meta[name=theme-color]').setAttribute('content','#efe8dc')}}catch(e){}</script>
-<script>/* boot screen on every load (boot.js cancels this 3 s failsafe once it runs) except deep links (#contact etc.), never with reduced motion (see /lab/boot.js); ?boot=0 skips it */var d=document.documentElement;d.classList.remove('no-js');/* every load starts at the top (or at the #link), not where the last visit stopped: the browser jumping there after the boot screen threw the star pathway around */try{history.scrollRestoration='manual'}catch(e){}if(!location.hash)scrollTo(0,0);try{if(!/[?&]boot=0/.test(location.search)&&!location.hash&&!matchMedia('(prefers-reduced-motion: reduce)').matches){d.classList.add('boot');window.__boot=setTimeout(function(){d.classList.remove('boot')},3000)}}catch(e){}</script>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;900&family=Geist+Mono:wght@400;500&family=Fragment+Mono&family=Inter:wght@400;500;600&family=Inter+Tight:wght@800;900&family=JetBrains+Mono:wght@500&family=Fredoka:wght@600&family=Pirata+One&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/lab/case-ui.css?v=c1db2e8a" ><link rel="stylesheet" href="/lab/folio.css?v=9d282a9e" >
+<script>try{var t=(location.search.match(/[?&]theme=(dark|light)/)||[])[1]||localStorage.getItem(`nyg-theme2`);t===`light`&&(delete document.documentElement.dataset.theme,document.querySelector(`meta[name=theme-color]`).setAttribute(`content`,`#efe8dc`))}catch{}</script>
+<script>var d=document.documentElement;d.classList.remove(`no-js`);var nv=null;try{nv=performance.getEntriesByType(`navigation`)[0]}catch{}var back=!!(nv&&nv.type===`back_forward`),inside=!1;try{inside=!!document.referrer&&new URL(document.referrer).origin===location.origin&&!(nv&&nv.type===`reload`)}catch{}if(back)try{history.scrollRestoration=`auto`}catch{}else{try{history.scrollRestoration=`manual`}catch{}location.hash||scrollTo(0,0)}try{!back&&!inside&&!/[?&]boot=0/.test(location.search)&&!location.hash&&!matchMedia(`(prefers-reduced-motion: reduce)`).matches&&(d.classList.add(`boot`),window.__boot=setTimeout(function(){d.classList.remove(`boot`)},3e3))}catch{}</script>
 </head>
 <body>
 <div class="boot-screen"><p class="boot-tl mono">NYG <i>//</i> portfolio</p><p class="boot-tr mono boot-clock">Toronto</p>
   <canvas class="boot-world" aria-hidden="true"></canvas><div class="boot-go" aria-hidden="true"></div><p class="boot-say mono" aria-hidden="true">Choose Me</p>
-  <div class="boot-mid"><p class="boot-name mono" aria-hidden="true" data-name="Noel Yohannes Ghebremeskel">Noel Yohannes Ghebremeskel</p><p class="boot-hint mono" aria-hidden="true">[ <span class="click">click</span><span class="tap">tap</span> the person ]</p></div>
-  <button type="button" class="boot-skip mono">Skip intro, go to Noel’s portfolio</button><button type="button" class="boot-sound mono" role="switch" aria-checked="false" hidden><span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>Sound<span class="sw" aria-hidden="true">off</span></button><div class="boot-log mono" aria-hidden="true"></div><div class="boot-score mono" aria-hidden="true"></div></div>
-<script src="/lab/boot.js" ></script>
-<a class="skip" href="#top">Skip to content</a>
-<!-- Home page (Noel chose Version A "Orbit", 2026-10-17). The empty comment slots below are filled from public/lab/content.js at build time. -->
+  <div class="boot-mid"><p class="boot-name mono" aria-hidden="true" data-name="Noel Yohannes Ghebremeskel">Noel Yohannes Ghebremeskel</p><p class="boot-role mono"><span>Full-stack developer · Toronto</span><span class="sep"> · </span><span>Open to Winter + Summer 2027</span></p><p class="boot-hint mono" aria-hidden="true">[ <span class="click">click</span><span class="tap">tap</span> the person ]</p><button type="button" class="boot-skip mono" aria-label="Skip intro, go to Noel’s portfolio">Skip intro <span aria-hidden="true">→</span></button><p class="boot-sound-hint mono">♪ <span class="click">click</span><span class="tap">tap</span> anywhere for sound</p></div>
+  <button type="button" class="boot-sound mono" role="switch" aria-checked="false" hidden><span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>Sound<span class="sw" aria-hidden="true">off</span></button><div class="boot-log mono" aria-hidden="true"></div><div class="boot-score mono" aria-hidden="true"></div></div>
+<script src="/lab/boot.js?v=716fa166" ></script>
 <div class="rules" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
 
 <main id="top">
@@ -42,10 +38,11 @@
     <div class="hero-text">
       <p class="who">Noel Yohannes Ghebremeskel <span><span class="sep">· </span>Full-stack developer · Toronto</span></p>
       <h1 class="tight">From React dashboards to AI agents that have to prove what they say, I build software you can check.</h1>
+      <p class="avail mono">Open to Winter + Summer 2027 · Canadian citizen</p>
       <p class="tag mono ticker" data-facts="Open to Winter + Summer 2027|2+ years shipping code at MPAC|88 automated tests across 2 projects">[ Open to Winter + Summer 2027 ]</p>
       <dl id="glance"><dt class="mono">Status</dt><dd>Student, York University (Lassonde School of Engineering)</dd><dt class="mono">Looking for</dt><dd>Winter + Summer 2027 internships or co-ops</dd><dt class="mono">Location</dt><dd>Toronto, Eastern Time</dd><dt class="mono">Eligibility</dt><dd>Canadian citizen</dd><dt class="mono">Experience</dt><dd>2+ years at MPAC (co-op + contract)</dd></dl>
       <p class="intro">Two years shipping production code at MPAC, now studying Digital Media at York University’s Lassonde School of Engineering. I build tools where the important numbers are checked by code, not taken on faith.</p>
-      <div class="acts"><a class="btn hot" href="#projects">See the projects ↓</a><a class="btn" href="/resume.pdf" download="Noel_Yohannes_Ghebremeskel_Resume.pdf">Résumé (PDF)</a><a class="btn" data-mail href="mailto:yohannesghebremesk@gmail.com">Email me</a><a class="more" href="/blog/">Read the blog →</a></div>
+      <div class="acts"><a class="btn hot" href="#projects">See the projects ↓</a><a class="btn" href="/Noel_Yohannes_Ghebremeskel_Resume.pdf" target="_blank" rel="noopener">Résumé (PDF) <span aria-hidden="true">↗</span><span class="sr"> (opens in a new tab)</span></a><a class="btn" data-mail href="mailto:yohannesghebremesk@gmail.com">Email me</a><a class="more" href="/blog/">Read the blog →</a></div>
     </div>
   </section>
 
@@ -83,8 +80,8 @@
 
   <section class="row invert" id="experience">
     <h2 class="tight">Experience</h2><p class="side mono">[ 2+ years · MPAC ]</p>
-    <div class="jobs" id="jobs"><div class="job"><div class="head"><h3>Junior Systems Developer</h3><p class="org">MPAC</p></div>
-      <ul class="pts"><li>Built a React investigation dashboard from the ground up with a staff AI engineer, over AWS Redshift data, plus an AWS QuickSight dashboard; delivered both to the VP.</li><li>Rebuilt legacy sign-in with AWS Amplify and Cognito, adding multi-factor authentication and reCAPTCHA; a Lambda trigger collects login metrics.</li><li>Re-architected ArcGIS Online field mapping to fetch aliases via the Esri REST API; fixed an iOS crash for field staff.</li><li>Took over data-drift validation across 12 business domains after a teammate left, and trained a summer student.</li></ul><p class="meta mono"><span>Apr 2025 – Oct 2026</span><span>Contract · 18 months</span></p></div><div class="job"><div class="head"><h3>Co-op Developer</h3><p class="org">MPAC</p></div>
+    <div class="jobs" id="jobs"><div class="job" data-job="mpac" tabindex="-1"><div class="head"><h3>Junior Systems Developer</h3><p class="org">MPAC</p></div>
+      <ul class="pts"><li>Built a React investigation dashboard from the ground up with a staff AI engineer, over AWS Redshift data, plus an AWS QuickSight dashboard; delivered both to the VP.</li><li>Rebuilt legacy sign-in with AWS Amplify and Cognito, adding multi-factor authentication and reCAPTCHA; a Lambda trigger collects login metrics.</li><li>Re-architected ArcGIS Online field mapping to fetch aliases via the Esri REST API; fixed an iOS crash for field staff.</li><li>Took over data-drift validation across 12 business domains after a teammate left, and trained a summer student.</li></ul><p class="meta mono"><span>Apr 2025 – Oct 2026</span><span>Contract · 18 months</span></p></div><div class="job" data-job="coop" tabindex="-1"><div class="head"><h3>Co-op Developer</h3><p class="org">MPAC</p></div>
       <ul class="pts"><li>Automated the company-wide offboarding workflow with Python AWS Lambda functions: notices to Facilities and Communications, auto-created Jira Service Desk tickets.</li><li>Built Intro.js onboarding walkthroughs, enforced role-based endpoint authorization and wrote unit tests.</li><li>Modernized UI components, including a login page redesign and a theme switcher with custom SVG icons.</li></ul><p class="meta mono"><span>Jan – Sep 2023</span><span>Co-op · 9 months</span></p></div></div>
   </section>
 
@@ -111,14 +108,13 @@
   <section class="row contact" id="contact">
     <h2 class="tight">Hiring for Winter or Summer 2027?</h2><p class="side mono">[ canadian citizen · eastern time ]</p>
     <a class="mail tight" data-mail="text" href="mailto:yohannesghebremesk@gmail.com">yohannesghebremesk@<wbr>gmail.com</a>
-    <div class="links"><a href="/resume.pdf" download="Noel_Yohannes_Ghebremeskel_Resume.pdf">Résumé (PDF)</a><a href="https://linkedin.com/in/noel-yohannes">LinkedIn</a><a href="https://github.com/nyohen">GitHub</a><a href="/blog/">Blog</a></div>
-    <p class="bigname tight" aria-hidden="true">Noel Yohannes<br>Ghebremeskel</p>
+    <div class="links"><a href="/Noel_Yohannes_Ghebremeskel_Resume.pdf" target="_blank" rel="noopener">Résumé (PDF) <span aria-hidden="true">↗</span><span class="sr"> (opens in a new tab)</span></a><a href="https://linkedin.com/in/noel-yohannes">LinkedIn</a><a href="https://github.com/nyohen">GitHub</a><a href="/blog/">Blog</a></div>
+    <p class="bigname tight" aria-hidden="true">Noel Yohannes <br>Ghebremeskel</p>
     <div class="scene full"><p class="dots-cap mono"><span class="ping" aria-hidden="true"></span><span class="scene-now">Toronto</span><span class="n" aria-live="polite"></span><button type="button" class="dots-pause" aria-pressed="false" aria-label="Pause sunset" data-what="sunset"><span aria-hidden="true">❚❚</span></button></p>
       <div class="dots-box"><canvas data-dots="sunset" tabindex="0" role="button" aria-label="The sky over the water in Toronto right now: the sun or moon where it really is. Dolphins, a shark, fish and a whale pass by. Click or press Enter on the water to make a fish or dolphin jump; click the sky by day to send a bird off."></canvas></div></div>
   </section>
 </main>
 
-<!-- Fixed bar at the bottom (samgoddard.co.uk's footer bar, our own code): socials // sections // clock. Phones: Menu opens a sheet upward. -->
 <div class="fbar mono">
   <button type="button" class="fb-menu" aria-expanded="false" aria-controls="fb-sheet">Menu</button>
   <div class="fb-sheet" id="fb-sheet">
@@ -132,7 +128,7 @@
       <a href="#contact" data-s="contact"><b aria-hidden="true">●</b>Contact</a><i aria-hidden="true">//</i><a href="/blog/" data-s="blog"><b aria-hidden="true">●</b>Blog</a>
     </nav>
     <nav class="fb-l" aria-label="Elsewhere">
-      <a href="https://linkedin.com/in/noel-yohannes">LinkedIn</a><i aria-hidden="true">//</i><a href="https://github.com/nyohen">GitHub</a><i aria-hidden="true">//</i><a data-mail href="mailto:yohannesghebremesk@gmail.com">Email</a><i aria-hidden="true">//</i><a href="/resume.pdf" download="Noel_Yohannes_Ghebremeskel_Resume.pdf">Résumé</a>
+      <a href="https://linkedin.com/in/noel-yohannes">LinkedIn</a><i aria-hidden="true">//</i><a href="https://github.com/nyohen">GitHub</a><i aria-hidden="true">//</i><a data-mail href="mailto:yohannesghebremesk@gmail.com">Email</a><i aria-hidden="true">//</i><a href="/Noel_Yohannes_Ghebremeskel_Resume.pdf" target="_blank" rel="noopener">Résumé <span aria-hidden="true">↗</span><span class="sr"> (PDF, opens in a new tab)</span></a>
     </nav>
   </div>
   <p class="fb-now" aria-hidden="true"></p>
@@ -140,9 +136,9 @@
 </div>
 <noscript><p style="background:var(--paper);color:var(--ink);border-top:1px solid var(--rule-strong);padding:1rem;margin:0">The pipeline diagram and case-study panels need JavaScript; everything else on this page is plain text.</p></noscript>
 
-<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.27/dist/lenis.min.js" defer ></script>
-<script src="/lab/content.js" ></script><script src="/lab/scenes.js" ></script><script src="/lab/case-ui.js" ></script><script src="/lab/hero.js" ></script><script src="/lab/folio.js" ></script><script src="/lab/burst.js" defer ></script><script src="/lab/cursor.js" defer ></script><script src="/lab/system-diagram.js" ></script>
-<script src="/lab/home.js" ></script>
-<script src="/lab/stars.js" ></script><script src="/lab/sound.js" ></script><script src="/lab/dots.js" ></script><script src="/lab/unlock.js" ></script><script src="/lab/reveal.js" ></script><script src="/lab/nav.js" defer ></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.27/dist/lenis.min.js" integrity="sha384-R18XzqnxvVLEF+BYfhpmDx30v7eP83fAckyfoRzK7/Uf6nGqufcmsk0eAKo7S3RU" crossorigin="anonymous" defer ></script>
+<script src="/lab/content.js?v=316f523b" ></script><script src="/lab/scenes.js?v=0a1ea24d" ></script><script src="/lab/case-ui.js?v=8bc85b48" ></script><script src="/lab/hero.js?v=f44782d9" ></script><script src="/lab/folio.js?v=5c51775d" ></script><script src="/lab/burst.js?v=a6485744" defer ></script><script src="/lab/cursor.js?v=a356dd54" defer ></script><script src="/lab/system-diagram.js?v=7975e68c" ></script>
+<script src="/lab/home.js?v=27f76db7" ></script>
+<script src="/lab/stars.js?v=fcb4afcb" ></script><script src="/lab/sound.js?v=9f74180e" ></script><script src="/lab/dots.js?v=dcf3a8ce" ></script><script src="/lab/unlock.js?v=f88c3ab2" ></script><script src="/lab/reveal.js?v=a91095f9" ></script><script src="/lab/nav.js?v=d8d0d083" defer ></script>
 </body>
 </html>

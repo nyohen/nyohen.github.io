@@ -6,7 +6,7 @@
 <title>Page not found — Noel Yohannes Ghebremeskel</title>
 <meta name="robots" content="noindex">
 <meta name="color-scheme" content="dark light">
-<script>try{if(localStorage.getItem('nyg-theme2')==='light')delete document.documentElement.dataset.theme}catch(e){}</script>
+<script>try{localStorage.getItem(`nyg-theme2`)===`light`&&delete document.documentElement.dataset.theme}catch{}</script>
 <meta name="darkreader-lock">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,23 +27,25 @@
   a.btn.hot { background: var(--hot); border-color: var(--hot); color: #131217; }
   a.btn:hover { background: var(--ink); border-color: var(--ink); color: var(--paper); }
   a:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+/* the same page transition as the rest of the site (2026-10-20) */
+@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }
+::view-transition-old(root) { animation: pt-out .35s ease-out both; }
+::view-transition-new(root) { animation: pt-in .8s cubic-bezier(.65, 0, .25, 1) both; }
+@keyframes pt-out { to { opacity: .1; transform: scale(.97); } }
+@keyframes pt-in { from { clip-path: inset(44% 44% round 8px); } to { clip-path: inset(0 round 0); } }
 </style>
+<script>addEventListener(`pagereveal`,function(e){e.viewTransition&&e.viewTransition.ready.catch(function(){})}),addEventListener(`pageswap`,function(e){e.viewTransition&&e.viewTransition.ready.catch(function(){})});</script>
 </head>
 <body>
 <main>
   <svg viewBox="0 0 210 120" aria-hidden="true">
-    <!-- the boot-screen cat, eyes looking sideways -->
-    <g id="c"></g>
+        <g id="c"></g>
   </svg>
   <p class="mono">[ 404 · page not found ]</p>
   <h1>This page wandered off.</h1>
   <p>The link may be old or mistyped. Everything is on the home page: projects, experience, résumé and contact.</p>
-  <div class="acts"><a class="btn hot" href="/">Go to the home page</a><a class="btn" href="/blog/">Writing</a><a class="btn" href="/resume.pdf">Résumé (PDF)</a></div>
+  <div class="acts"><a class="btn hot" href="/">Go to the home page</a><a class="btn" href="/blog/">Blog</a><a class="btn" href="/Noel_Yohannes_Ghebremeskel_Resume.pdf" target="_blank" rel="noopener">Résumé (PDF) <span aria-hidden="true">↗</span><span style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap"> (opens in a new tab)</span></a></div>
 </main>
-<script>
-  // draw the cat from the same grid as the boot screen (o = eyes, looking to the side)
-  (function () { var CAT = ['....#...........#....','....##.........##....','....###.......###....','....#############....','...###############...','...###############...','...####o#####o####...','...###############...','...#######o#######...','....#############....','.....###########.....','.......#######.......'];
-    var g = document.getElementById('c'), h = ''; CAT.forEach(function (r, y) { r.split('').forEach(function (ch, x) { if (ch !== '.') h += '<circle cx="' + (x * 10 + 5) + '" cy="' + (y * 10 + 5) + '" r="3.6"' + (ch === 'o' ? ' class="o"' : '') + '/>'; }); }); g.innerHTML = h; })();
-</script>
+<script>(function(){var e=[`....#...........#....`,`....##.........##....`,`....###.......###....`,`....#############....`,`...###############...`,`...###############...`,`...####o#####o####...`,`...###############...`,`...#######o#######...`,`....#############....`,`.....###########.....`,`.......#######.......`],t=document.getElementById(`c`),n=``;e.forEach(function(e,t){e.split(``).forEach(function(e,r){e!==`.`&&(n+=`<circle cx="`+(r*10+5)+`" cy="`+(t*10+5)+`" r="3.6"`+(e===`o`?` class="o"`:``)+`/>`)})}),t.innerHTML=n})();</script>
 </body>
 </html>
